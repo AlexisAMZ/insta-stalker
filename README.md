@@ -1,6 +1,6 @@
 <div align="center">
 
-# IFT — Instagram Followers Tracker
+# Insta Stalker
 
 **Suivez les abonnés et abonnements d'un compte Instagram dans le temps.
 Capture depuis la console du navigateur, comparaisons, historique — 100 % lecture seule.**
@@ -31,8 +31,8 @@ Et le diff vous dit exactement **qui est arrivé, qui est parti, qui a été unf
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/VOTRE_COMPTE/instagram-followers-tracker.git
-cd instagram-followers-tracker
+git clone https://github.com/AlexisAMZ/insta-stalker.git
+cd insta-stalker
 
 # Environnement Python (pour les commandes CLI)
 python3 -m venv .venv
