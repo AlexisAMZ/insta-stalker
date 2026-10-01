@@ -151,7 +151,6 @@ Les comptes privés utilisés pendant le développement restent volontairement a
 ## 🙏 Crédits & inspiration
 
 - [instaloader](https://instaloader.github.io/) — la bibliothèque de référence pour l'accès programmatique à Instagram.
-- [InstagramUnfollowers](https://github.com/prado/InstagramUnfollowers) — l'idée des interfaces « scanner » en un seul collage dans la console.
 
 ## 📄 Licence
 
