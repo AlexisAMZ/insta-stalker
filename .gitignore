@@ -1,0 +1,10 @@
+# Captures personnelles — NE JAMAIS publier (noms d'utilisateurs réels)
+data/
+
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+
+# Système
+.DS_Store

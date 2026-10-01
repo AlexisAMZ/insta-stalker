@@ -1,0 +1,135 @@
+<!doctype html>
+<!-- Page factice qui imite le profil + les fenêtres « abonnés / abonnements »
+     d'Instagram (chargement au défilement, bascule entre les deux listes comme
+     une SPA), pour tester console-capture.js sans toucher à Instagram.
+     URL : http://127.0.0.1:8765/mock/  (cible = "mock")
+     137 noms + 1 ligne sans nom par liste ; le profil annonce
+     « 137 abonnements · 140 abonnés » (écart volontaire pour les abonnés). -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Mock — profil et listes</title>
+<style>
+  body { background:#000; color:#fff; font-family:-apple-system,sans-serif; margin:0; padding:40px; }
+  [role="dialog"] { width:400px; margin:auto; background:#262626; border-radius:12px; padding:16px; }
+  .entete { font-weight:700; text-align:center; margin-bottom:12px; }
+  #liste { height:400px; overflow-y:auto; border:1px solid #444; border-radius:8px; }
+  a { display:flex; align-items:center; gap:10px; padding:8px 12px; color:#fff; text-decoration:none; }
+  a:hover { background:#333; }
+  .barre-profil { width:400px; margin:0 auto 14px; text-align:center; }
+  .barre-profil a { display:inline; padding:4px; color:#4da3ff; }
+  .avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(45deg,#f09,#fa0); flex:none; }
+</style>
+</head>
+<body>
+
+<!-- profil « derrière » : liens vers les deux listes + compteurs annoncés -->
+<div class="barre-profil">
+  <a href="/mock/followers/">140 abonnés</a> ·
+  <a href="/mock/following/">137 abonnements</a>
+</div>
+
+<div role="dialog" aria-label="Liste">
+  <div class="entete">Abonnés <a href="/explore/">(décoy explore)</a></div>
+  <div id="liste"></div>
+</div>
+
+<!-- compteurs du profil, lus par le script pour vérifier les totaux -->
+<div class="profil-derriere" style="text-align:center;color:#666;font-size:12px;margin-top:10px">
+  137 abonnements · 140 abonnés
+</div>
+
+<script>
+  const TOTAL = 137;          // nombre total de comptes nommés simulés
+  const LOT = 15;             // ajoutés à chaque « chargement »
+  const LATENCE = 400;        // ms de délai réseau simulé
+  let n = 0;
+  let prefixe = "user";       // "user" (abonnés) ou "suivi" (abonnements)
+
+  const AVATAR = `<img class="avatar" alt="" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">`;
+  const nom = () => prefixe + "_" + String(n).padStart(4, "0");
+
+  function ajouter() {
+    n++;
+    const a = document.createElement("a");
+    a.setAttribute("role", "link");
+    a.href = "/" + nom() + "/";
+    a.innerHTML = AVATAR + `<span>${nom()}</span>`;
+    liste.appendChild(a);
+  }
+
+  // compte désactivé : ligne avec avatar mais sans nom ni lien
+  function ajouterMorte() {
+    const d = document.createElement("div");
+    d.style.cssText = "display:flex;align-items:center;gap:10px;padding:8px 12px;color:#777";
+    d.innerHTML = AVATAR + `<span>Compte supprimé</span>`;
+    liste.appendChild(d);
+  }
+
+  const liste = document.getElementById("liste");
+  const entete = document.querySelector(".entete");
+  const dialogEl = document.querySelector("[role='dialog']");
+
+  // en mode propre profil, le compteur OUvre le panneau s'il a été fermé
+  function montreDialog() {
+    if (!document.body.contains(dialogEl)) document.body.appendChild(dialogEl);
+  }
+
+  function construire() {
+    liste.innerHTML = "";
+    n = 0;
+    for (let i = 0; i < 20; i++) ajouter();
+    ajouterMorte();
+  }
+
+  liste.addEventListener("scroll", () => {
+    if (liste.scrollTop + liste.clientHeight >= liste.scrollHeight - 10 && n < TOTAL) {
+      setTimeout(() => { for (let i = 0; i < LOT && n < TOTAL; i++) ajouter(); }, LATENCE);
+    }
+  });
+
+  // bascule « SPA » entre les deux listes, comme Instagram
+  function basculer(abonnements, pousserUrl) {
+    if (pousserUrl) history.pushState({}, "", abonnements ? "/mock/following/" : "/mock/followers/");
+    prefixe = abonnements ? "suivi" : "user";
+    entete.firstChild.textContent = abonnements ? "Abonnements " : "Abonnés ";
+    construire();
+  }
+
+  document.querySelectorAll('a[href$="/followers/"], a[href$="/following/"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      basculer(a.getAttribute("href").endsWith("/following/"), true);
+    });
+  });
+
+  // mode ?propre=1 : simule SON PROPRE profil — compteurs en boutons (pas de
+  // changement d'URL) et onglets à l'intérieur du panneau
+  const propre = new URLSearchParams(location.search).has("propre");
+  if (propre) {
+    const barre = document.querySelector(".barre-profil");
+    barre.innerHTML = `<button id="c-abonnes" style="margin:0 8px;padding:6px 10px;border:0;background:none;color:#4da3ff;font:inherit;cursor:pointer">140 abonnés</button>
+      <span style="color:#666">·</span>
+      <button id="c-abonnements" style="margin:0 8px;padding:6px 10px;border:0;background:none;color:#4da3ff;font:inherit;cursor:pointer">137 abonnements</button>`;
+    document.getElementById("c-abonnes").onclick = () => { montreDialog(); basculer(false, false); };
+    document.getElementById("c-abonnements").onclick = () => { montreDialog(); basculer(true, false); };
+
+    const onglets = document.createElement("div");
+    onglets.style.cssText = "display:flex;gap:8px;justify-content:center;margin-bottom:10px";
+    onglets.innerHTML = `<button role="tab" data-tab="abonnes" style="padding:4px 10px;border:1px solid #444;background:none;color:#fff;border-radius:6px;font:inherit;cursor:pointer">Abonnés</button>
+      <button role="tab" data-tab="abonnements" style="padding:4px 10px;border:1px solid #444;background:none;color:#fff;border-radius:6px;font:inherit;cursor:pointer">Abonnements</button>`;
+    document.querySelector("[role='dialog']").prepend(onglets);
+    onglets.querySelectorAll("button").forEach((b) => {
+      b.addEventListener("click", () => basculer(b.dataset.tab === "abonnements", false));
+    });
+  }
+
+  // état initial (éventuellement ?type=abonnements)
+  const typeDemande = new URLSearchParams(location.search).get("type");
+  if (typeDemande === "abonnements") {
+    entete.firstChild.textContent = "Abonnements ";
+  }
+  construire();
+</script>
+</body>
+</html>
