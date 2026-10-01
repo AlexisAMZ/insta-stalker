@@ -2,16 +2,18 @@
 
 # Insta Stalker
 
-**Suivez les abonnés et abonnements d'un compte Instagram dans le temps.
-Capture depuis la console du navigateur, comparaisons, historique — 100 % lecture seule.**
+**Instagram followers tracker & unfollowers detector : suivez les abonnés et
+abonnements d'un compte Instagram dans le temps.**
+Capture depuis la console du navigateur, comparaisons, historique — 100 % lecture seule.
+
+Who followed, who unfollowed, who got purged : une seule capture pour la photo
+initiale, une recapture quelques jours plus tard, et le diff vous dit exactement
+**qui est arrivé, qui est parti, qui a été unfollowed.**
 
 [![License: MIT](https://img.shields.io/badge/Licence-MIT-38e1ff?style=flat-square)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10+-ff4d8f?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Interface](https://img.shields.io/badge/Interface-console_100%25-38e1ff?style=flat-square)](#-utilisation)
 [![Sans serveur](https://img.shields.io/badge/Donn%C3%A9es-100%25_locales-4ade80?style=flat-square)](#-%C3%A9thique--limites)
-
-*Une seule capture pour la photo initiale. Une recapture quelques jours plus tard.
-Et le diff vous dit exactement **qui est arrivé, qui est parti, qui a été unfollowed.***
 
 </div>
 
@@ -57,8 +59,8 @@ Aucune autre dépendance : l'interface navigateur est un fichier unique, sans bu
 3. **F12** → onglet **Console** → collez tout le contenu de [`console-app.js`](console-app.js) → **Entrée**.
 4. Cliquez **« Lancer la capture »** : le tableau de bord s'anime, les comptes défilent en direct, puis les deux fichiers `.txt` sont téléchargés :
    ```
-   amz.eth_abonnes_2026-09-30_143005.txt
-   amz.eth_abonnements_2026-09-30_143112.txt
+   le_compte_abonnes_2026-09-30_143005.txt
+   le_compte_abonnements_2026-09-30_143112.txt
    ```
 
 Commandes console disponibles : `ift.stop()` · `ift.clear()` · `ift.count` · `ift.lignes` · `ift.listes` · `ift.list()` · `ift.copy()` · `ift.download()` · `ift.profil("nom")` · `ift.fermer()`
@@ -128,7 +130,7 @@ Seuls les noms qui **apparaissent ou disparaissent** entre deux captures compten
 
 ## 🧪 Testé sur
 
-- **Un vrai compte personnel** (`@amz.eth`) : capture complète des deux listes en un
+- **Un vrai compte personnel** : capture complète des deux listes en un
   seul collage, compteurs en boutons (cas « propre profil »), exports et comparaison.
 - **La page factice incluse** ([`tests/mock/`](tests/mock/index.html)) : 137 comptes
   simulés avec chargement progressif au défilement, bascule abonnés ↔ abonnements,
