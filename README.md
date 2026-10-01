@@ -126,6 +126,20 @@ Seuls les noms qui **apparaissent ou disparaissent** entre deux captures compten
 └── data/                 # Vos captures (gitignoré — ne partez jamais en ligne)
 ```
 
+## 🧪 Testé sur
+
+- **Un vrai compte personnel** (`@amz.eth`) : capture complète des deux listes en un
+  seul collage, compteurs en boutons (cas « propre profil »), exports et comparaison.
+- **La page factice incluse** ([`tests/mock/`](tests/mock/index.html)) : 137 comptes
+  simulés avec chargement progressif au défilement, bascule abonnés ↔ abonnements,
+  ligne « compte désactivé » sans nom, et compteurs annoncés volontairement incohérents
+  pour éprouver le contrôle qualité.
+- **Les pièges classiques** : panneau fermé au moment du collage, page autre que le
+  profil, liste qui charge lentement, arrêt en cours de capture (`ift.stop()`),
+  rechargement de secours avec relance automatique.
+
+Les comptes privés utilisés pendant le développement restent volontairement anonymes.
+
 ## 🛠 Dépannage
 
 - **⚠️ « 109/131 mais ~131 lignes »** — rien n'est raté : les lignes sans nom sont des comptes supprimés/désactivés.
