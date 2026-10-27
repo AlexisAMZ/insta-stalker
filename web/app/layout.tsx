@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 
+export const viewport = { themeColor: "#0d0d0d" };
+
 export const metadata: Metadata = {
   title: "AMZ Tracker — qui t'a suivi, qui est parti",
   description:

@@ -14,4 +14,4 @@ export async function middleware(req: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-export const config = { matcher: ["/((?!_next/|favicon.ico).*)"] };
+export const config = { matcher: ["/((?!_next/|icon|apple-icon|opengraph-image|manifest.webmanifest|favicon.ico).*)"] };
