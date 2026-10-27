@@ -85,7 +85,7 @@ export default function Home() {
                 {LEFT.slice(0, 4).map((m) => (
                   <li key={m.handle}>
                     <Avatar name={m.name} hue={m.hue} />
-                    <span className="who"><b>@{m.handle}</b><small>{m.note ?? m.name}</small></span>
+                    <span className="who"><Link href={`/personne/${m.handle}`}><b>@{m.handle}</b></Link><small>{m.note ?? m.name}</small></span>
                     <span className="when">{m.when}</span>
                   </li>
                 ))}
@@ -97,7 +97,7 @@ export default function Home() {
                 {NOT_BACK.map((m) => (
                   <li key={m.handle}>
                     <Avatar name={m.name} hue={m.hue} />
-                    <span className="who"><b>@{m.handle}</b><small>{m.note ?? m.name}</small></span>
+                    <span className="who"><Link href={`/personne/${m.handle}`}><b>@{m.handle}</b></Link><small>{m.note ?? m.name}</small></span>
                     <span className="when">{m.when}</span>
                   </li>
                 ))}
@@ -117,7 +117,7 @@ export default function Home() {
               <li key={c.handle}>
                 <Avatar name={c.name} hue={c.hue} />
                 <div>
-                  <b className="handle">@{c.handle}</b>
+                  <Link href={`/personne/${c.handle}`} className="handle">@{c.handle}</Link>
                   <p className="said">{c.said}</p>
                   <p className="fact">{c.fact}</p>
                 </div>
@@ -128,6 +128,20 @@ export default function Home() {
       </section>
 
       <section className="section">
+        <div className="wrap split">
+          <div className="intro">
+            <h2>Sur ton téléphone.</h2>
+            <p>Là où tu regardes vraiment tes messages.</p>
+          </div>
+          <dl className="honest">
+            <div><dt>Installe le site</dt><dd>Ajoute AMZ Tracker à ton écran d&rsquo;accueil : il s&rsquo;ouvre comme une appli, sans passer par un store.</dd></div>
+            <div><dt>Alertes</dt><dd>Active la capture automatique : tu es prévenu dès qu&rsquo;un nom disparaît, sans rien refaire à la main.</dd></div>
+            <div><dt>Capture depuis le mobile</dt><dd>En préparation. Pour l&rsquo;instant, la première capture se lance depuis un ordinateur.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 0 }}>
         <div className="wrap split">
           <div className="intro">
             <h2>Dit franchement.</h2>
@@ -165,12 +179,6 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="foot">
-        <div className="wrap">
-          <span>AMZ Tracker · maquette, données fictives</span>
-          <span>Non affilié à Instagram ni à Snapchat.</span>
-        </div>
-      </footer>
     </main>
   );
 }

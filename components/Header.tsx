@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCutList } from "@/lib/cutlist";
 import { BrandMarks, LogoMark } from "./Logos";
 
 const LINKS = [
@@ -12,6 +13,7 @@ const LINKS = [
 
 export default function Header() {
   const path = usePathname();
+  const { list } = useCutList();
   if (path.startsWith("/acces")) return null;
   return (
     <header className="top">
@@ -26,12 +28,15 @@ export default function Header() {
             <Link
               key={l.href}
               href={l.href}
-              className={l.href === "/" ? "nav-home" : undefined}
+              className={l.href === "/" || l.href === "/comparaison" ? "nav-minor" : undefined}
               aria-current={path === l.href ? "page" : undefined}
             >
               {l.label}
             </Link>
           ))}
+          <Link href="/a-couper" aria-current={path === "/a-couper" ? "page" : undefined}>
+            À couper{list.length > 0 && <span className="count">{list.length}</span>}
+          </Link>
           <Link className="nav-cta" href="/connexion" aria-current={path === "/connexion" ? "page" : undefined}>
             Se connecter
           </Link>

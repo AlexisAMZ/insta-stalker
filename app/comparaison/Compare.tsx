@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
+import CutButton from "@/components/CutButton";
 import PlatformSwitch from "@/components/PlatformSwitch";
 import { Avatar } from "@/components/Person";
 import { ARRIVED, CAPTURES, LEFT, NOT_BACK, PLATFORM_LABEL, type Platform } from "@/lib/sample";
@@ -13,14 +15,6 @@ export default function Compare() {
   const [q, setQ] = useState("");
   const [from, setFrom] = useState("c3");
   const [to, setTo] = useState("c4");
-  const [cut, setCut] = useState<ReadonlySet<string>>(new Set());
-  const toggleCut = (h: string) =>
-    setCut((prev) => {
-      const next = new Set(prev);
-      if (next.has(h)) next.delete(h);
-      else next.add(h);
-      return next;
-    });
   const label = PLATFORM_LABEL[platform];
 
   const rows = useMemo(() => {
@@ -75,7 +69,7 @@ export default function Compare() {
         <div className="summary" aria-live="polite">
           <span><strong className="num down">{LEFT.length}</strong>{label.lost.toLowerCase()}</span>
           <span><strong className="num">{NOT_BACK.length}</strong>{label.notBack.toLowerCase()}</span>
-          <span><strong className="num">{cut.size}</strong>à couper</span>
+          <span><Link href="/a-couper" className="summary-link">Voir ma liste « à couper » →</Link></span>
         </div>
 
         <div className="seg" role="group" aria-label="Filtrer" style={{ marginBottom: 16 }}>
@@ -93,13 +87,11 @@ export default function Compare() {
                 <li key={r.handle}>
                   <Avatar name={r.name} hue={r.hue} />
                   <span className="who">
-                    <b>@{r.handle}</b>
+                    <Link href={`/personne/${r.handle}`}><b>@{r.handle}</b></Link>
                     <small>{r.note ?? r.name}</small>
                   </span>
                   <span className={`badge ${r.kind}`}>{r.kind === "in" ? label.badgeIn : r.kind === "back" ? label.badgeBack : label.badgeOut}</span>
-                  <button type="button" className="flag" aria-pressed={cut.has(r.handle)} onClick={() => toggleCut(r.handle)}>
-                    {cut.has(r.handle) ? "À couper ✓" : "À couper ?"}
-                  </button>
+                  <CutButton handle={r.handle} />
                 </li>
               ))}
             </ul>

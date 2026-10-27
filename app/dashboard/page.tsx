@@ -2,6 +2,7 @@ import Dashboard from "./Dashboard";
 
 export const metadata = { title: "Tableau de bord — AMZ Tracker" };
 
-export default function Page() {
-  return <Dashboard />;
+export default async function Page({ searchParams }: { searchParams: Promise<{ etat?: string }> }) {
+  const { etat } = await searchParams;
+  return <Dashboard initialEmpty={etat === "vide"} />;
 }
