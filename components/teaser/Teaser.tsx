@@ -1,10 +1,12 @@
 import { BrandMarks, LogoMark } from "@/components/Logos";
 import AdminAccess from "./AdminAccess";
+import { publicWaitlistCount } from "@/lib/waitlist-store";
 import WaitlistForm from "./WaitlistForm";
 
 // Page d'attente partagée : /bientot (et la racine avant lancement) l'affichent fermée, /acces ouvre l'accès admin.
 const WORDS = ["L'ère", "du", "stalking", "commence."];
-export default function Teaser({ adminOpen = false, next = "/" }: { adminOpen?: boolean; next?: string }) {
+export default async function Teaser({ adminOpen = false, next = "/" }: { adminOpen?: boolean; next?: string }) {
+  const count = await publicWaitlistCount();
   return (
     <main className="soon">
       <div className="soon-box">
@@ -24,6 +26,11 @@ export default function Teaser({ adminOpen = false, next = "/" }: { adminOpen?: 
         </p>
         <h2 className="soon-sub">Sois prévenu du lancement.</h2>
         <p className="soon-lede">Laisse ton e-mail : tu en reçois un seul, le jour où c&rsquo;est prêt.</p>
+        {count !== null && (
+          <p className="soon-count">
+            <b className="num">{count.toLocaleString("fr-FR")}</b> {count > 1 ? "personnes sont déjà inscrites" : "personne est déjà inscrite"}
+          </p>
+        )}
         <WaitlistForm />
         <p className="soon-note">
           Pas de spam, pas de revente. Tu peux demander la suppression de ton adresse à tout moment.
