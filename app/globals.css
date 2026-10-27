@@ -350,3 +350,8 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 
 .by { font-family: var(--font-body); font-weight: 600; font-size: 0.72em; letter-spacing: 0; color: var(--ink-soft); margin-left: 8px; }
 .top .brand { gap: 10px; }
+
+/* stories à partager */
+.stories { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+.stories li { display: grid; gap: 12px; justify-items: start; }
+.stories img { width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: 20px; box-shadow: 0 18px 32px -20px rgba(13, 13, 13, 0.5); background: var(--white); }

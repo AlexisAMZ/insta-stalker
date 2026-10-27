@@ -12,7 +12,7 @@ export default function CutButton({ handle, large }: { handle: string; large?: b
       aria-pressed={on}
       onClick={() => toggle(handle)}
     >
-      {on ? "À couper ✓" : "À couper ?"}
+      {on ? "À dégager ✓" : "À dégager ?"}
     </button>
   );
 }

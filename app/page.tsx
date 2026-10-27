@@ -24,7 +24,7 @@ export default function Home() {
             <p className="lede">
               Elle ne te répond pas, mais tu vois qu&rsquo;elle envoie des snaps à d&rsquo;autres. Lui t&rsquo;a
               unfollow sans rien dire. unfollowd te montre nom par nom qui est parti, qui ne te suit pas en
-              retour et qui te ment. Pour faire le tri, et couper ceux qui ne méritent pas ta place.
+              retour et qui te ment. Pour faire le tri, et dégager ceux qui ne méritent pas ta place.
             </p>
             <div className="cta">
               <Link className="btn primary" href="/dashboard">Voir qui est parti</Link>
@@ -70,7 +70,7 @@ export default function Home() {
           <ol className="steps">
             <li><div><h3>Fais une première capture</h3><p>Tu ouvres ton profil, tu lances la capture. Tes listes défilent en direct, puis elles sont datées et gardées.</p></div></li>
             <li><div><h3>Reviens quelques jours plus tard</h3><p>Même geste, nouvelle capture. Ceux qui sont partis entre-temps apparaissent tout seuls.</p></div></li>
-            <li><div><h3>Fais le tri</h3><p>Tu vois qui t&rsquo;a unfollow, qui ne te suit pas en retour, qui te ment. Tu marques ceux à couper et tu télécharges la liste.</p></div></li>
+            <li><div><h3>Fais le tri</h3><p>Tu vois qui t&rsquo;a unfollow, qui ne te suit pas en retour, qui te ment. Tu marques ceux à dégager et tu télécharges la liste.</p></div></li>
           </ol>
         </div>
       </section>
@@ -111,7 +111,7 @@ export default function Home() {
       <section className="wrap" style={{ marginTop: 16 }}>
         <div className="band snap">
           <h2>Sur Snap : qui te ment.</h2>
-          <p className="band-lede">Ce qu&rsquo;on te dit d&rsquo;un côté, ce que ton compte montre de l&rsquo;autre. Exemples fictifs.</p>
+          <p className="band-lede">Ce qu&rsquo;on te dit d&rsquo;un côté, ce que ton compte montre de l&rsquo;autre. Exemples.</p>
           <ul className="lies">
             {CONTRADICTIONS.map((c) => (
               <li key={c.handle}>

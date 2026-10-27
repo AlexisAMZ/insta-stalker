@@ -37,7 +37,7 @@ export default function Compare() {
         <div className="page-head">
           <div>
             <h1>Comparaison</h1>
-            <p>Deux captures, face à face : qui est parti, qui ne te suit pas, qui est à couper.</p>
+            <p>Deux captures, face à face : qui est parti, qui ne te suit pas, qui est à dégager.</p>
           </div>
           <PlatformSwitch value={platform} onChange={setPlatform} />
         </div>
@@ -69,7 +69,7 @@ export default function Compare() {
         <div className="summary" aria-live="polite">
           <span><strong className="num down">{LEFT.length}</strong>{label.lost.toLowerCase()}</span>
           <span><strong className="num">{NOT_BACK.length}</strong>{label.notBack.toLowerCase()}</span>
-          <span><Link href="/a-couper" className="summary-link">Voir ma liste « à couper » →</Link></span>
+          <span><Link href="/a-degager" className="summary-link">Voir ma liste « à dégager » →</Link></span>
         </div>
 
         <div className="seg" role="group" aria-label="Filtrer" style={{ marginBottom: 16 }}>

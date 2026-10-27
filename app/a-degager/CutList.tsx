@@ -14,7 +14,7 @@ export default function CutList() {
 
   function download() {
     const url = URL.createObjectURL(new Blob([text + "\n"], { type: "text/plain" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: "a-couper.txt" });
+    const a = Object.assign(document.createElement("a"), { href: url, download: "a-degager.txt" });
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -34,7 +34,7 @@ export default function CutList() {
       <div className="wrap">
         <div className="page-head">
           <div>
-            <h1>À couper</h1>
+            <h1>À dégager</h1>
             <p>Ceux que tu as marqués. L&rsquo;outil ne supprime personne : tu fais le ménage toi-même dans l&rsquo;appli.</p>
           </div>
           {people.length > 0 && (
@@ -47,8 +47,8 @@ export default function CutList() {
 
         {people.length === 0 ? (
           <section className="panel empty-state">
-            <h2>Personne à couper pour l&rsquo;instant.</h2>
-            <p>Sur la liste, touche « À couper ? » à côté d&rsquo;un nom pour le mettre ici.</p>
+            <h2>Personne à dégager pour l&rsquo;instant.</h2>
+            <p>Sur la liste, touche « À dégager ? » à côté d&rsquo;un nom pour le mettre ici.</p>
             <Link className="btn primary" href="/comparaison">Voir la liste</Link>
           </section>
         ) : (
@@ -66,7 +66,10 @@ export default function CutList() {
                 </li>
               ))}
             </ul>
-            <button type="button" className="linkbtn" onClick={clear}>Tout vider</button>
+            <div className="cta-row" style={{ margin: "8px 8px 12px" }}>
+              <Link className="btn small primary" href="/partage">Partager mon tri en story</Link>
+              <button type="button" className="linkbtn" onClick={clear}>Tout vider</button>
+            </div>
           </section>
         )}
       </div>

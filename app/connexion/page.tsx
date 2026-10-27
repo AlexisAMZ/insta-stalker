@@ -19,9 +19,6 @@ export default function Page() {
             <SnapchatMark mono size={32} /> Continuer avec Snapchat
           </Link>
         </div>
-        <p className="login-note">
-          Maquette : aucun identifiant n&rsquo;est demandé ici, les boutons ouvrent simplement le tableau de bord.
-        </p>
       </div>
     </main>
   );

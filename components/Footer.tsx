@@ -9,8 +9,9 @@ export default function Footer() {
   return (
     <footer className="foot">
       <div className="wrap">
-        <span>unfollowd by AMZ · maquette, données fictives</span>
+        <span>unfollowd by AMZ</span>
         <span className="foot-links">
+          <Link href="/partage">Partager</Link>
           <Link href="/alertes">Alertes</Link>
           <Link href="/legal">Mentions et confidentialité</Link>
           <span>Non affilié à Instagram ni à Snapchat.</span>

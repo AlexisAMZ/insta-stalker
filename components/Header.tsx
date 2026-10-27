@@ -34,8 +34,8 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
-          <Link href="/a-couper" aria-current={path === "/a-couper" ? "page" : undefined}>
-            À couper{list.length > 0 && <span className="count">{list.length}</span>}
+          <Link href="/a-degager" aria-current={path === "/a-degager" ? "page" : undefined}>
+            À dégager{list.length > 0 && <span className="count">{list.length}</span>}
           </Link>
           <Link className="nav-cta" href="/connexion" aria-current={path === "/connexion" ? "page" : undefined}>
             Se connecter

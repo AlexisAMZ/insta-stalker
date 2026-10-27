@@ -5,7 +5,6 @@ export default function Page() {
     <main className="page">
       <div className="wrap prose">
         <h1>Mentions légales, confidentialité et conditions.</h1>
-        <p className="note">Projet de texte pour la maquette. À faire relire avant toute mise en ligne publique.</p>
 
         <h2 id="mentions">Mentions légales</h2>
         <p>Éditeur : [à compléter : nom ou raison sociale, contact].</p>
@@ -15,7 +14,7 @@ export default function Page() {
         <h2 id="confidentialite">Confidentialité</h2>
         <p>L&rsquo;outil lit les listes que ton compte peut déjà voir et en garde des captures datées, un nom par ligne.</p>
         <p>Où ces captures sont stockées, combien de temps, et comment les supprimer : [à préciser selon l&rsquo;hébergement retenu].</p>
-        <p>Cette maquette n&rsquo;enregistre aucune donnée personnelle côté serveur. Ta liste « à couper » reste dans ton navigateur.</p>
+        <p>Ta liste « à dégager » reste dans ton navigateur.</p>
 
         <h2 id="conditions">Conditions d&rsquo;utilisation</h2>
         <p>Usage personnel : tu n&rsquo;utilises l&rsquo;outil que sur tes propres comptes.</p>

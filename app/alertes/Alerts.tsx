@@ -7,7 +7,7 @@ type Row = { id: string; title: string; text: string };
 const ROWS: Row[] = [
   { id: "unfollow", title: "Me prévenir quand quelqu'un me quitte", text: "Dès qu'un nom disparaît de ta liste entre deux captures." },
   { id: "liar", title: "Me prévenir pour les écarts sur Snap", text: "Quand ce qu'on te dit ne colle pas avec ce que montre ton compte." },
-  { id: "digest", title: "Résumé du dimanche", text: "Un récap de la semaine : qui est parti, qui est à couper." },
+  { id: "digest", title: "Résumé du dimanche", text: "Un récap de la semaine : qui est parti, qui est à dégager." },
 ];
 
 export default function Alerts() {
@@ -56,7 +56,7 @@ export default function Alerts() {
 
           <div className="cta-row">
             <button type="button" className="btn primary" onClick={() => setSaved(true)}>Enregistrer</button>
-            {saved && <span role="status" className="status-ok">Réglages enregistrés (maquette).</span>}
+            {saved && <span role="status" className="status-ok">Réglages enregistrés.</span>}
           </div>
         </section>
       </div>
