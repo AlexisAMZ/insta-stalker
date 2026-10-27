@@ -8,3 +8,7 @@ __pycache__/
 
 # Système
 .DS_Store
+node_modules
+.next
+next-env.d.ts
+*.tsbuildinfo

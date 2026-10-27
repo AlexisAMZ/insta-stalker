@@ -1,4 +1,5 @@
 #!/bin/bash
 # Lanceur : ./track <commande> (utilise le Python du venv local)
 DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$DIR/.venv/bin/python" "$DIR/tracker.py" "$@"
+ROOT="$(cd "$DIR/.." && pwd)"
+exec "$ROOT/.venv/bin/python" "$DIR/tracker.py" "$@"

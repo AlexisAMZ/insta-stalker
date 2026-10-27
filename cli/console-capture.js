@@ -25,11 +25,11 @@
    (Échap sur la page Instagram = ift.stop())
 
    4. Intègre les fichiers au projet :
-        ./track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt
+        ./cli/track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt
       puis, dans quelques jours, refais une capture et :
-        ./track historique <profil>          ← évolution des deux listes
-        ./track compare <profil>             ← détail arrivées/départs
-        ./track compare <profil> --type abonnements
+        ./cli/track historique <profil>          ← évolution des deux listes
+        ./cli/track compare <profil>             ← détail arrivées/départs
+        ./cli/track compare <profil> --type abonnements
 
    ⚠️  LECTURE SEULE : le script fait défiler les listes et lit les noms
    affichés. Il ne clique QUE sur les liens « abonnés / abonnements » du profil
@@ -116,7 +116,7 @@
     }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([liste.join("\n") + "\n"], { type: "text/plain" }));
-    a.download = `${t}_${stamp()}.txt`;   // convention reconnue par ./track import
+    a.download = `${t}_${stamp()}.txt`;   // convention reconnue par ./cli/track import
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -301,7 +301,7 @@
     window.ift.fin = true;
     const recap = Object.entries(resultats).map(([t, l]) => `${t}=${l.length}`).join(" · ") || "rien";
     console.log(`IFT : fini. ${recap}`);
-    console.log(`IFT → dans le projet :  ./track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt`);
+    console.log(`IFT → dans le projet :  ./cli/track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt`);
   }
 
   main();

@@ -21,12 +21,12 @@ initiale, une recapture quelques jours plus tard, et le diff vous dit exactement
 
 ## ✨ Fonctionnalités
 
-- **Interface complète dans la console** (`console-app.js`) — collez le script dans les DevTools, un vrai tableau de bord s'ouvre par-dessus la page : grand compteur, **flux des comptes en direct** avec avatars, onglets Abonnés / Abonnements / Comparaison, recherche, exports.
+- **Interface complète dans la console** (`cli/console-app.js`) — collez le script dans les DevTools, un vrai tableau de bord s'ouvre par-dessus la page : grand compteur, **flux des comptes en direct** avec avatars, onglets Abonnés / Abonnements / Comparaison, recherche, exports.
 - **Les deux listes en un seul collage** — abonnés **et** abonnements, avec bascule automatique.
 - **Onglet Comparaison intégré** — chargez un `.txt` précédent et voyez immédiatement les **arrivés** et les **partis**, avec rapport téléchargeable.
 - **Contrôle qualité intégré** — l'app lit le nombre annoncé par le profil, compte les lignes « sans nom » (comptes supprimés/désactivés) et vous dit si quelque chose manque vraiment.
 - **Autonome** — elle se déplace toute seule vers le profil, gère votre propre profil (compteurs en boutons), les onglets du panneau, et se relance après un rechargement.
-- **Historique en ligne de commande** — `./track historique` montre l'évolution capture après capture ; `./track compare` détaille chaque nom.
+- **Historique en ligne de commande** — `./cli/track historique` montre l'évolution capture après capture ; `./cli/track compare` détaille chaque nom.
 - **Fichiers propres et datés** — `profil_abonnements_2026-09-30_143112.txt`, un `@username` par ligne, triés, diffables avec n'importe quel outil.
 - **Lecture seule, discretement** — défilement progressif au rythme humain, aucun follow, aucun like, aucun message.
 
@@ -40,13 +40,13 @@ cd insta-stalker
 python3 -m venv .venv
 .venv/bin/pip install instaloader
 
-chmod +x track
+chmod +x cli/track
 ```
 
 Aucune autre dépendance : l'interface navigateur est un fichier unique, sans build.
 
 > **Pourquoi deux voies ?** Les comptes **publics** peuvent être capturés en ligne de
-> commande (`./track login` + `./track fetch`). Les comptes **privés** que votre compte
+> commande (`./cli/track login` + `./cli/track fetch`). Les comptes **privés** que votre compte
 > a le droit de voir passent par l'interface navigateur, qui utilise votre session
 > Instagram réelle.
 
@@ -56,7 +56,7 @@ Aucune autre dépendance : l'interface navigateur est un fichier unique, sans bu
 
 1. Sur `instagram.com`, connectée avec **votre** compte (celui qui voit les listes).
 2. Placez-vous sur le profil cible.
-3. **F12** → onglet **Console** → collez tout le contenu de [`console-app.js`](console-app.js) → **Entrée**.
+3. **F12** → onglet **Console** → collez tout le contenu de [`cli/console-app.js`](cli/console-app.js) → **Entrée**.
 4. Cliquez **« Lancer la capture »** : le tableau de bord s'anime, les comptes défilent en direct, puis les deux fichiers `.txt` sont téléchargés :
    ```
    le_compte_abonnes_2026-09-30_143005.txt
@@ -69,12 +69,12 @@ Commandes console disponibles : `ift.stop()` · `ift.clear()` · `ift.count` · 
 
 ```bash
 # Jour 1 — la photo de référence
-./track import nom_du_profil ~/Downloads/*_abonnes_*.txt ~/Downloads/*_abonnements_*.txt
+./cli/track import nom_du_profil ~/Downloads/*_abonnes_*.txt ~/Downloads/*_abonnements_*.txt
 
 # Jour N — recapture (mêmes gestes), puis :
-./track historique nom_du_profil                      # tendance des deux listes
-./track compare nom_du_profil                         # qui s'est abonné / parti
-./track compare nom_du_profil --type abonnements      # qui le profil suit / unfollowed
+./cli/track historique nom_du_profil                      # tendance des deux listes
+./cli/track compare nom_du_profil                         # qui s'est abonné / parti
+./cli/track compare nom_du_profil --type abonnements      # qui le profil suit / unfollowed
 ```
 
 Sortie type :
@@ -94,9 +94,9 @@ abonnements :
 ### 3. Comptes publics, sans navigateur
 
 ```bash
-./track login votre_compte          # une seule fois (session sauvegardée)
-./track fetch nom_du_profil         # abonnés
-./track fetch nom_du_profil --type abonnements
+./cli/track login votre_compte          # une seule fois (session sauvegardée)
+./cli/track fetch nom_du_profil         # abonnés
+./cli/track fetch nom_du_profil --type abonnements
 ```
 
 ## 🔍 Lire les chiffres
@@ -120,19 +120,21 @@ Seuls les noms qui **apparaissent ou disparaissent** entre deux captures compten
 ## 🧱 Structure
 
 ```
-├── console-app.js        # Interface complète (coller dans la console)
-├── console-capture.js    # Version minimale, 100 % console, sans interface
-├── tracker.py            # CLI : import, historique, compare, fetch, login
-├── track                 # Lanceur CLI
-├── tests/mock/           # Page factice pour tester sans toucher à Instagram
-└── data/                 # Vos captures (gitignoré — ne partez jamais en ligne)
+├── app/ components/ lib/  # Site web AMZ Tracker (Next.js, racine du projet)
+├── cli/
+│   ├── console-app.js     # Interface complète (coller dans la console)
+│   ├── console-capture.js # Version minimale, 100 % console, sans interface
+│   ├── tracker.py         # CLI : import, historique, compare, fetch, login
+│   ├── track              # Lanceur CLI
+│   └── tests/mock/        # Page factice pour tester sans toucher à Instagram
+└── data/                  # Vos captures (gitignoré — ne partez jamais en ligne)
 ```
 
 ## 🧪 Testé sur
 
 - **Un vrai compte personnel** : capture complète des deux listes en un
   seul collage, compteurs en boutons (cas « propre profil »), exports et comparaison.
-- **La page factice incluse** ([`tests/mock/`](tests/mock/index.html)) : 137 comptes
+- **La page factice incluse** ([`cli/tests/mock/`](cli/tests/mock/index.html)) : 137 comptes
   simulés avec chargement progressif au défilement, bascule abonnés ↔ abonnements,
   ligne « compte désactivé » sans nom, et compteurs annoncés volontairement incohérents
   pour éprouver le contrôle qualité.

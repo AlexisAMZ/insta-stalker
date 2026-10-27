@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Next.js (App Router). The site lives in `web/`; the existing console scripts and Python CLI stay at the repo root. First phase is a static mockup with sample data; real functionality is wired later.
+Next.js (App Router). The site lives at the repo root (Vercel-ready); the console scripts and Python CLI live in `cli/`. First phase is a static mockup with sample data; real functionality is wired later.
 
 ## Users
 

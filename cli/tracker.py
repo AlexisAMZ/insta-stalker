@@ -30,7 +30,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 SNAPSHOT_FMT = "%Y-%m-%d_%H%M%S"
 TYPES = ("abonnes", "abonnements")   # abonnes = suivent le profil ; abonnements = suivis par lui

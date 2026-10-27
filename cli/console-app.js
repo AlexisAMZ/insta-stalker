@@ -14,7 +14,7 @@
    4. Onglet « Comparaison » : charge un .txt précédent (ou colle-le) →
       la liste des arrivés et des partis depuis cette capture.
    5. Boutons « Télécharger » dans chaque onglet → fichiers pour le projet :
-        ./track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt
+        ./cli/track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt
 
    ⚠️  LECTURE SEULE : le script fait défiler les listes et lit les noms.
    Il ne clique QUE sur les liens « abonnés / abonnements » du profil pour
@@ -459,8 +459,8 @@
         </div>
         <div class="ift-chemin">
           Une fois les fichiers téléchargés, dans le projet :<br>
-          <code>./track import profil ~/Downloads/*_abonnes_*.txt *_abonnements_*.txt</code><br>
-          puis <code>./track historique profil</code>
+          <code>./cli/track import profil ~/Downloads/*_abonnes_*.txt *_abonnements_*.txt</code><br>
+          puis <code>./cli/track historique profil</code>
         </div>
       </aside>
       <main style="display:flex;flex-direction:column;min-height:0">
