@@ -5,7 +5,7 @@ import { CONTRADICTIONS, LEFT, NOT_BACK } from "@/lib/sample";
 
 const FAQ = [
   ["Un unfollow, ça veut dire qu'il me déteste ?", "Pas forcément. L'outil te donne un fait : cette personne n'est plus dans ta liste. À toi de juger si ça compte, et si elle mérite encore une place dans ta vie."],
-  ["Est-ce que ça prévient les gens que je regarde ?", "Non. L'outil lit seulement les listes que ton compte peut déjà voir. Il ne suit personne, n'aime rien et n'envoie aucun message."],
+  ["Est-ce que ça prévient les gens que je regarde ?", "Non. Les listes sont lues depuis ton compte, et le viewer n'ajoute pas ton nom à la liste des vues d'une story. Aucun follow, aucun like, aucun message."],
   ["Comment tu sais qui me ment sur Snapchat ?", "L'outil recoupe ce que ton compte peut voir et te montre les écarts, nom par nom. Il donne des faits, pas des verdicts : c'est toi qui conclus."],
   ["Pourquoi le total ne tombe-t-il pas toujours juste ?", "Les comptes supprimés ou désactivés sont comptés par la plateforme mais n'ont plus de nom. Ils apparaissent comme lignes sans nom, et l'écart reste stable d'une capture à l'autre."],
   ["Mes captures sont-elles publiques ?", "Non. Ce sont des fichiers datés, un nom par ligne, que tu gardes et que tu peux supprimer quand tu veux."],
@@ -127,6 +127,14 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="wrap" style={{ marginTop: 16 }}>
+        <div className="band viewer-band">
+          <h2>Regarde sans laisser de trace.</h2>
+          <p className="band-lede">Les stories d&rsquo;un compte public et sa photo de profil en grand, sans que ton nom apparaisse dans les vues.</p>
+          <Link className="btn primary" href="/viewer">Ouvrir le viewer</Link>
+        </div>
+      </section>
+
       <section className="section">
         <div className="wrap split">
           <div className="intro">
@@ -150,7 +158,7 @@ export default function Home() {
           <dl className="honest">
             <div><dt>Des faits, pas des intentions</dt><dd>Un unfollow n&rsquo;est pas une preuve de mauvaise foi. L&rsquo;outil montre la liste, c&rsquo;est toi qui tranches.</dd></div>
             <div><dt>Lecture seule</dt><dd>Il fait défiler des listes et lit des noms. Consulter une liste n&rsquo;envoie aucune notification.</dd></div>
-            <div><dt>Ton compte</dt><dd>Il lit ce que ton compte a déjà le droit de voir. Aucune permission n&rsquo;est contournée.</dd></div>
+            <div><dt>Ton compte</dt><dd>Pour les listes, il lit ce que ton compte a déjà le droit de voir. Le viewer ne montre que des comptes publics : un compte privé reste privé.</dd></div>
             <div><dt>Conditions d&rsquo;utilisation</dt><dd>Ce type d&rsquo;outil va contre les conditions d&rsquo;Instagram. Garde un usage léger et personnel.</dd></div>
           </dl>
         </div>

@@ -15,9 +15,11 @@ export default function Page() {
         <p>L&rsquo;outil lit les listes que ton compte peut déjà voir et en garde des captures datées, un nom par ligne.</p>
         <p>Où ces captures sont stockées, combien de temps, et comment les supprimer : [à préciser selon l&rsquo;hébergement retenu].</p>
         <p>Ta liste « à dégager » reste dans ton navigateur.</p>
+        <p>Quand tu cherches un compte dans le viewer, le pseudo recherché est transmis à un prestataire technique de collecte (Scrapfly) pour récupérer les informations publiques du compte. Aucune recherche n&rsquo;est associée à ton identité dans cette version.</p>
 
         <h2 id="conditions">Conditions d&rsquo;utilisation</h2>
-        <p>Usage personnel : tu n&rsquo;utilises l&rsquo;outil que sur tes propres comptes.</p>
+        <p>Les captures de listes portent sur tes propres comptes. Le viewer de stories ne montre que des comptes publics.</p>
+        <p>Tu ne republies pas le contenu d&rsquo;un compte (photo, story) sans l&rsquo;accord de son auteur.</p>
         <p>Tu t&rsquo;engages à ne pas t&rsquo;en servir pour harceler, menacer ou contacter de façon répétée une personne.</p>
         <p>Les plateformes interdisent en général les outils automatisés dans leurs conditions : ton compte peut être limité. Garde un usage léger.</p>
         <p>L&rsquo;outil montre des faits sur des listes. Il ne dit pas ce qu&rsquo;une personne pense et ne prouve aucune intention.</p>
