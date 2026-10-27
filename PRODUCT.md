@@ -35,6 +35,10 @@ Snapshot-and-diff, read-only: the tool only reads lists you can already see, nev
 - Read-only by design; rate limits mean captures take minutes for thousands of accounts.
 - Open: real Snapchat data source, accounts/auth, where captures are stored for the hosted site, pricing (none decided — do not invent).
 
+## Public Messaging Constraint
+
+The Snapchat "who lies to you" signal can use more than the friend list (e.g. Snap score). The owner does not want the method described publicly: site copy must not explain how it works, and must not claim certainty about lying — only present facts for the user to judge.
+
 ## Brand Commitments
 
 - Name: **AMZ Tracker**, shown with Instagram and Snapchat marks (user-specified).

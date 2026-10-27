@@ -243,7 +243,7 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 .lies .handle { font-weight: 700; }
 .lies .said { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.1; margin-top: 4px; }
 .lies .fact { margin-top: 8px; font-weight: 600; }
-.lies .fact::before { content: "La liste dit : "; font-weight: 500; opacity: 0.7; }
+.lies .fact::before { content: "Les faits : "; font-weight: 500; opacity: 0.7; }
 .badge.back { background: #ffe9c7; color: #8a4b00; }
 .flag { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 700 0.85rem var(--font-body); cursor: pointer; white-space: nowrap; }
 .flag:hover { background: rgba(13, 13, 13, 0.07); }

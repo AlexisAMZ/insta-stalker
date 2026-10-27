@@ -6,7 +6,7 @@ import { CONTRADICTIONS, LEFT, NOT_BACK } from "@/lib/sample";
 const FAQ = [
   ["Un unfollow, ça veut dire qu'il me déteste ?", "Pas forcément. L'outil te donne un fait : cette personne n'est plus dans ta liste. À toi de juger si ça compte, et si elle mérite encore une place dans ta vie."],
   ["Est-ce que ça prévient les gens que je regarde ?", "Non. L'outil lit seulement les listes que ton compte peut déjà voir. Il ne suit personne, n'aime rien et n'envoie aucun message."],
-  ["Comment tu sais qui me ment sur Snapchat ?", "Il ne devine rien. Il compare ce qu'on te dit (« je t'ai ajouté », « je t'ai jamais retiré ») à ce que ta liste d'amis montre. Le fait est là, tu tires la conclusion."],
+  ["Comment tu sais qui me ment sur Snapchat ?", "L'outil recoupe ce que ton compte peut voir et te montre les écarts, nom par nom. Il donne des faits, pas des verdicts : c'est toi qui conclus."],
   ["Pourquoi le total ne tombe-t-il pas toujours juste ?", "Les comptes supprimés ou désactivés sont comptés par la plateforme mais n'ont plus de nom. Ils apparaissent comme lignes sans nom, et l'écart reste stable d'une capture à l'autre."],
   ["Mes captures sont-elles publiques ?", "Non. Ce sont des fichiers datés, un nom par ligne, que tu gardes et que tu peux supprimer quand tu veux."],
 ];
@@ -111,7 +111,7 @@ export default function Home() {
       <section className="wrap" style={{ marginTop: 16 }}>
         <div className="band snap">
           <h2>Sur Snap : qui te ment.</h2>
-          <p className="band-lede">Ce qu&rsquo;on te dit d&rsquo;un côté, ce que ta liste d&rsquo;amis montre de l&rsquo;autre. Exemples fictifs.</p>
+          <p className="band-lede">Ce qu&rsquo;on te dit d&rsquo;un côté, ce que ton compte montre de l&rsquo;autre. Exemples fictifs.</p>
           <ul className="lies">
             {CONTRADICTIONS.map((c) => (
               <li key={c.handle}>
@@ -131,7 +131,7 @@ export default function Home() {
         <div className="wrap split">
           <div className="intro">
             <h2>Dit franchement.</h2>
-            <p>Ce que l&rsquo;outil montre, et ce qu&rsquo;il ne peut pas savoir.</p>
+            <p>Ce que l&rsquo;outil montre, et ce qu&rsquo;il ne dit pas à ta place.</p>
           </div>
           <dl className="honest">
             <div><dt>Des faits, pas des intentions</dt><dd>Un unfollow n&rsquo;est pas une preuve de mauvaise foi. L&rsquo;outil montre la liste, c&rsquo;est toi qui tranches.</dd></div>
