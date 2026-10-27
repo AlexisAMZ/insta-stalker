@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { InstagramMark, SnapchatMark } from "@/components/Logos";
 import { Avatar } from "@/components/Person";
 import { CONTRADICTIONS, LEFT, NOT_BACK } from "@/lib/sample";
@@ -11,9 +14,35 @@ const FAQ = [
   ["Mes captures sont-elles publiques ?", "Non. Ce sont des fichiers datés, un nom par ligne, que tu gardes et que tu peux supprimer quand tu veux."],
 ];
 
+export const metadata: Metadata = {
+  title: { absolute: "unfollowd — qui t'a unfollow sur Instagram et Snapchat" },
+  alternates: { canonical: "/" },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: SITE_NAME,
+      url: SITE_URL,
+      applicationCategory: "SocialNetworkingApplication",
+      operatingSystem: "Web",
+      inLanguage: "fr",
+      description:
+        "Découvre qui t'a unfollow, qui ne te suit pas en retour et qui te ment sur Instagram et Snapchat.",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQ.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+    },
+  ],
+};
+
 export default function Home() {
   return (
     <main>
+      <JsonLd data={jsonLd} />
       <section className="hero">
         <div className="wrap">
           <h1>

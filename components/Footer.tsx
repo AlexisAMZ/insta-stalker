@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 export default function Footer() {
   const path = usePathname();
-  if (path.startsWith("/acces")) return null;
+  if (path.startsWith("/acces") || path.startsWith("/bientot")) return null;
   return (
     <footer className="foot">
       <div className="wrap">

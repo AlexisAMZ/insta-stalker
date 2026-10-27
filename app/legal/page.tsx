@@ -1,4 +1,12 @@
-export const metadata = { title: "Mentions et confidentialité — unfollowd" };
+import type { Metadata } from "next";
+import { isLaunched, NOINDEX } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Mentions légales et confidentialité",
+  description: "Mentions légales, politique de confidentialité et conditions d'utilisation de unfollowd by AMZ.",
+  alternates: { canonical: "/legal" },
+  robots: isLaunched() ? { index: true, follow: true } : NOINDEX,
+};
 
 export default function Page() {
   return (
@@ -14,6 +22,11 @@ export default function Page() {
         <h2 id="confidentialite">Confidentialité</h2>
         <p>L&rsquo;outil lit les listes que ton compte peut déjà voir et en garde des captures datées, un nom par ligne.</p>
         <p>Où ces captures sont stockées, combien de temps, et comment les supprimer : [à préciser selon l&rsquo;hébergement retenu].</p>
+        <h3>Liste d&rsquo;attente</h3>
+        <p>Si tu laisses ton e-mail pour être prévenu du lancement, nous enregistrons ton adresse, la date d&rsquo;inscription et, le cas échéant, la source du lien (par exemple « snapchat »).</p>
+        <p>Finalité : t&rsquo;envoyer un seul e-mail au lancement. Base légale : ton consentement, donné en cochant la case du formulaire. Nous ne revendons pas ton adresse.</p>
+        <p>Stockage : base de données hébergée chez Upstash [région à préciser]. Durée : jusqu&rsquo;à l&rsquo;envoi du message de lancement, puis suppression, et au plus 12 mois.</p>
+        <p>Tes droits : accès, rectification, suppression, retrait du consentement à tout moment, en écrivant à [adresse de contact à compléter].</p>
         <p>Ta liste « à dégager » reste dans ton navigateur.</p>
         <p>Quand tu cherches un compte dans le viewer, le pseudo recherché est transmis à un prestataire technique de collecte (Scrapfly) pour récupérer les informations publiques du compte. Aucune recherche n&rsquo;est associée à ton identité dans cette version.</p>
 

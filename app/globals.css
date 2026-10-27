@@ -384,3 +384,18 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 
 .viewer-band { background: linear-gradient(140deg, var(--ig-a) -10%, var(--ig-b) 45%, var(--ig-c) 110%); color: var(--white); display: grid; gap: 16px; justify-items: start; }
 .viewer-band .btn.primary { background: var(--white); color: var(--ink); border-color: var(--white); }
+
+/* page d'attente */
+.soon { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; background: var(--snap); }
+.soon-box { width: min(560px, 100%); background: var(--bg); border-radius: var(--radius); padding: clamp(24px, 5vw, 52px); display: grid; gap: 18px; }
+.soon-box .brand { margin: 0; }
+.soon-box h1 { font-size: clamp(2.6rem, 8vw, 4.4rem); letter-spacing: -0.05em; }
+.soon-lede { color: var(--ink-soft); font-size: 1.1rem; }
+.soon-form { display: grid; gap: 14px; margin-top: 4px; }
+.soon-form .field input { width: 100%; }
+.check { display: flex; gap: 12px; align-items: flex-start; font-size: 0.95rem; cursor: pointer; }
+.check input { width: 22px; height: 22px; margin: 1px 0 0; flex: none; accent-color: var(--ink); }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.soon-done { padding: 18px 20px; border-radius: 16px; background: var(--ink); color: var(--bg); font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; letter-spacing: -0.02em; }
+.soon-note { font-size: 0.9rem; color: var(--ink-soft); }
+.prose h3 { font-size: 1.25rem; margin: 24px 0 4px; }

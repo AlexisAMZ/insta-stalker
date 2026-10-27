@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/site";
 import { STORIES } from "@/lib/stories";
 
-export const metadata = { title: "Partager — unfollowd" };
+export const metadata: Metadata = { title: "Partager", description: "Des stories prêtes à poster.", robots: NOINDEX };
 
 export default function Page() {
   return (

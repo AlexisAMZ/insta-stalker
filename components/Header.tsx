@@ -15,7 +15,7 @@ const LINKS = [
 export default function Header() {
   const path = usePathname();
   const { list } = useCutList();
-  if (path.startsWith("/acces")) return null;
+  if (path.startsWith("/acces") || path.startsWith("/bientot")) return null;
   return (
     <header className="top">
       <div className="wrap">

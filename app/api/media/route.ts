@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { isAllowedMediaUrl } from "@/lib/instagram";
-import { allow } from "@/lib/ratelimit";
+import { allowShared, clientIp } from "@/lib/ratelimit";
 
 const MAX_BYTES = 60 * 1024 * 1024;
 
@@ -8,8 +8,7 @@ export async function GET(req: NextRequest) {
   const target = req.nextUrl.searchParams.get("u") ?? "";
   if (!isAllowedMediaUrl(target)) return NextResponse.json({ error: "Média non autorisé" }, { status: 400 });
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
-  if (!allow(`media:${ip}`, 200, 10 * 60_000)) return NextResponse.json({ error: "Trop de requêtes" }, { status: 429 });
+  if (!(await allowShared(`media:${clientIp(req.headers)}`, 200, 10 * 60_000))) return NextResponse.json({ error: "Trop de requêtes" }, { status: 429 });
 
   let upstream: Response;
   try {
@@ -26,5 +25,16 @@ export async function GET(req: NextRequest) {
   const headers = new Headers({ "content-type": type, "cache-control": "private, max-age=600", "x-content-type-options": "nosniff" });
   const filename = req.nextUrl.searchParams.get("dl");
   if (filename) headers.set("content-disposition", `attachment; filename="${filename.replace(/[^A-Za-z0-9._-]/g, "_").slice(0, 80)}"`);
-  return new NextResponse(upstream.body, { headers });
+  // content-length peut manquer ou mentir : on coupe le flux au-delà du plafond.
+  let sent = 0;
+  const capped = upstream.body.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        sent += chunk.byteLength;
+        if (sent > MAX_BYTES) controller.error(new Error("too_large"));
+        else controller.enqueue(chunk);
+      },
+    }),
+  );
+  return new NextResponse(capped, { headers });
 }

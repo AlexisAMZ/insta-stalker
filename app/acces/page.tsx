@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/site";
 import AccessForm from "./AccessForm";
 import { BrandMarks } from "@/components/Logos";
 
-export const metadata = { title: "Accès — unfollowd" };
+export const metadata: Metadata = { title: "Accès", description: "Accès privé à unfollowd.", robots: NOINDEX };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;

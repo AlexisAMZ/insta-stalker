@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/site";
 import Link from "next/link";
 import { InstagramMark, SnapchatMark } from "@/components/Logos";
 
-export const metadata = { title: "Connexion — unfollowd" };
+export const metadata: Metadata = { title: "Connexion", description: "Connecte ton compte Instagram ou Snapchat.", robots: NOINDEX };
 
 export default function Page() {
   return (

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { isValidHandle, normalizeHandle, parseProfile, parseStories, type IgProfile, type IgStoryItem } from "@/lib/instagram";
-import { allow } from "@/lib/ratelimit";
+import { allowShared, clientIp } from "@/lib/ratelimit";
 import { hasIgSession, igJson, profileUrl, storiesUrl, UpstreamError } from "@/lib/scrapfly";
 
 type StoriesStatus = "ok" | "none" | "private" | "unavailable";
@@ -15,11 +15,13 @@ export async function GET(req: NextRequest) {
   const handle = normalizeHandle(req.nextUrl.searchParams.get("u") ?? "");
   if (!isValidHandle(handle)) return fail("Pseudo invalide. Exemple : @nom.utilisateur", 400);
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
-  if (!allow(`viewer:${ip}`, 15, 10 * 60_000)) return fail("Trop de recherches. Réessaie dans quelques minutes.", 429);
-
   const hit = cache.get(handle.toLowerCase());
   if (hit && Date.now() - hit.at < TTL_MS) return NextResponse.json(hit.data);
+
+  // Seules les recherches qui coûtent un appel Scrapfly sont comptées : par visiteur, puis plafond global par jour.
+  const ip = clientIp(req.headers);
+  if (!(await allowShared(`viewer:${ip}`, 15, 10 * 60_000))) return fail("Trop de recherches. Réessaie dans quelques minutes.", 429);
+  if (!(await allowShared("viewer:global", 500, 24 * 3_600_000))) return fail("Le service est très demandé aujourd'hui. Réessaie demain.", 429);
 
   try {
     const profile = parseProfile(await igJson(profileUrl(handle)));

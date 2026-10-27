@@ -1,3 +1,4 @@
+import { NOINDEX } from "@/lib/site";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CutButton from "@/components/CutButton";
@@ -12,7 +13,7 @@ export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
-  return { title: `@${handle} — unfollowd` };
+  return { title: `@${handle}`, robots: NOINDEX };
 }
 
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
