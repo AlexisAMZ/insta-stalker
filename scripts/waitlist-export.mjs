@@ -1,25 +1,15 @@
-// Usage : UPSTASH_REDIS_REST_URL=… UPSTASH_REDIS_REST_TOKEN=… node scripts/waitlist-export.mjs > liste.csv
-const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
-const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
-if (!url || !token) {
-  console.error("Variables UPSTASH_REDIS_REST_URL et UPSTASH_REDIS_REST_TOKEN requises.");
+// Usage :
+//   vercel env pull .env.production.local --environment=production
+//   node --env-file=.env.production.local scripts/waitlist-export.mjs > liste.csv
+import { neon } from "@neondatabase/serverless";
+
+const url = process.env.DATABASE_URL;
+if (!url) {
+  console.error("DATABASE_URL requise (voir l'en-tête du script).");
   process.exit(1);
 }
 
-const res = await fetch(url, {
-  method: "POST",
-  headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
-  body: JSON.stringify(["HGETALL", "waitlist"]),
-});
-if (!res.ok) {
-  console.error(`Erreur du store : ${res.status}`);
-  process.exit(1);
-}
-const { result } = await res.json();
-
+const rows = await neon(url)`SELECT email, created_at, source FROM waitlist ORDER BY created_at`;
+const q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
 console.log("email,inscrit_le,source");
-for (let i = 0; i < result.length; i += 2) {
-  let meta = {};
-  try { meta = JSON.parse(result[i + 1]); } catch { /* ligne sans métadonnées */ }
-  console.log([result[i], meta.at ?? "", meta.source ?? ""].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
-}
+for (const r of rows) console.log([r.email, new Date(r.created_at).toISOString(), r.source].map(q).join(","));

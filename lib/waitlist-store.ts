@@ -1,10 +1,13 @@
 import "server-only";
-import { hasKv, kv } from "./kv";
+import { hasDb, sql } from "./db";
 
-export const hasWaitlistStore = hasKv;
+export const hasWaitlistStore = hasDb;
 
 /** Ajoute l'e-mail (une seule fois). Renvoie « exists » s'il était déjà inscrit. */
 export async function addToWaitlist(email: string, source: string): Promise<"added" | "exists"> {
-  const result = await kv(["HSETNX", "waitlist", email, JSON.stringify({ at: new Date().toISOString(), source })]);
-  return result === 1 ? "added" : "exists";
+  const rows = await sql()`
+    INSERT INTO waitlist (email, source) VALUES (${email}, ${source})
+    ON CONFLICT (email) DO NOTHING
+    RETURNING email`;
+  return rows.length > 0 ? "added" : "exists";
 }
