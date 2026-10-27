@@ -53,31 +53,24 @@ export function BrandMarks({ size = 22 }: { size?: number }) {
   );
 }
 
-// Logo AMZ : un « A » blanc sur noir, deux bandes en coin pour les deux plateformes
-// (bande jaune Snapchat, triangle dégradé Instagram).
+// Logo unfollowd : un « u » (toi) blanc sur noir, et un point qui s'en détache (celui qui part),
+// dégradé du jaune Snapchat vers les couleurs d'Instagram.
+export const U_PATH =
+  "M9 20H21V38A6 6 0 0 0 33 38V20H45V54H34V50.5C31.5 53.3 28 55 23.5 55C14.8 55 9 49.5 9 40Z";
+
 export function LogoMark({ size = 32, className }: LogoProps) {
   return (
     <svg viewBox="0 0 64 64" width={size} height={size} className={className} role="img" aria-label="unfollowd by AMZ">
       <defs>
-        <linearGradient id="amz-g" gradientUnits="userSpaceOnUse" x1="45" y1="0" x2="64" y2="19">
-          <stop offset="0" stopColor="#fd8d32" />
+        <linearGradient id="ufd-g" gradientUnits="userSpaceOnUse" x1="49.5" y1="19.5" x2="60.5" y2="30.5">
+          <stop offset="0" stopColor="#fffc00" />
           <stop offset="0.5" stopColor="#ee2a7b" />
           <stop offset="1" stopColor="#6228d7" />
         </linearGradient>
-        <clipPath id="amz-c">
-          <rect width="64" height="64" rx="14" />
-        </clipPath>
       </defs>
-      <g clipPath="url(#amz-c)">
-        <rect width="64" height="64" fill="#0d0d0d" />
-        <polygon points="34,0 41,0 64,23 64,30" fill="#fffc00" />
-        <polygon points="45,0 64,0 64,19" fill="url(#amz-g)" />
-        <path
-          fillRule="evenodd"
-          fill="#ffffff"
-          d="M26 10H38L56 56H42.5L39.4 47H24.6L21.5 56H8ZM28.4 37H35.6L32 25Z"
-        />
-      </g>
+      <rect width="64" height="64" rx="14" fill="#0d0d0d" />
+      <path d={U_PATH} fill="#ffffff" />
+      <circle cx="55" cy="25" r="5.5" fill="url(#ufd-g)" />
     </svg>
   );
 }

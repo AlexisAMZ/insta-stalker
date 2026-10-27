@@ -41,7 +41,7 @@ The Snapchat "who lies to you" signal can use more than the friend list (e.g. Sn
 
 ## Brand Commitments
 
-- Name: **unfollowd by AMZ** (domain unfollowd.com, bought by the owner), shown with Instagram and Snapchat marks. Previous working name: AMZ Tracker.
+- Name: **unfollowd by AMZ** (domain unfollowd.com, bought by the owner), shown with Instagram and Snapchat marks. Previous working name: AMZ Tracker. Logo: white lowercase « u » on a black tile with a detached dot (the person who leaves), the dot graded from Snapchat yellow to Instagram pink/violet.
 - Language: French UI copy.
 
 ## Evidence on Hand
