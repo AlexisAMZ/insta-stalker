@@ -43,7 +43,7 @@ export default async function Teaser({ adminOpen = false, next = "/" }: { adminO
           </p>
           <p>
             Stockage : base de données Postgres chez Neon, aux États-Unis (Virginie). Durée : jusqu&rsquo;à l&rsquo;envoi du message de lancement, puis suppression, et au plus 12 mois.
-            Tes droits (accès, suppression, retrait du consentement) : écris à [adresse de contact à compléter].
+            Tes droits (accès, suppression, retrait du consentement) : écris à contact@unfollowd.com.
           </p>
           <p>
             Mesure d&rsquo;audience : Google Analytics, uniquement si tu l&rsquo;acceptes dans le bandeau. Sans accord, aucun cookie de mesure n&rsquo;est déposé.
