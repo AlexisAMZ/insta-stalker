@@ -30,6 +30,10 @@ export default function Page() {
         <p>Ta liste « à dégager » reste dans ton navigateur.</p>
         <p>Quand tu cherches un compte dans le viewer, le pseudo recherché est transmis à un prestataire technique de collecte (Scrapfly) pour récupérer les informations publiques du compte. Aucune recherche n&rsquo;est associée à ton identité dans cette version.</p>
 
+        <h2 id="audience">Mesure d&rsquo;audience et cookies</h2>
+        <p>Avec ton accord uniquement, nous utilisons Google Analytics pour compter les visites et connaître leur origine (par exemple « snapchat »). Google peut alors déposer des cookies et recevoir des données de navigation.</p>
+        <p>Sans ton accord, aucun cookie de mesure n&rsquo;est déposé. Tu peux changer d&rsquo;avis à tout moment avec le lien « Cookies » en bas de page.</p>
+
         <h2 id="conditions">Conditions d&rsquo;utilisation</h2>
         <p>Les captures de listes portent sur tes propres comptes. Le viewer de stories ne montre que des comptes publics.</p>
         <p>Tu ne republies pas le contenu d&rsquo;un compte (photo, story) sans l&rsquo;accord de son auteur.</p>
