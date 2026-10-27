@@ -23,10 +23,18 @@ export default function Header() {
         </Link>
         <nav className="nav" aria-label="Navigation principale">
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} aria-current={path === l.href ? "page" : undefined}>
+            <Link
+              key={l.href}
+              href={l.href}
+              className={l.href === "/" ? "nav-home" : undefined}
+              aria-current={path === l.href ? "page" : undefined}
+            >
               {l.label}
             </Link>
           ))}
+          <Link className="nav-cta" href="/connexion" aria-current={path === "/connexion" ? "page" : undefined}>
+            Se connecter
+          </Link>
         </nav>
       </div>
     </header>

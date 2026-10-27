@@ -22,9 +22,9 @@ export default function Home() {
           </h1>
           <div className="under">
             <p className="lede">
-              Fais une capture de tes listes Instagram et Snapchat, puis une autre plus tard. AMZ Tracker
-              te montre nom par nom qui est parti, qui ne te suit pas en retour et qui dit le contraire
-              de sa liste. Pour faire le tri, et couper ceux qui ne méritent pas ta place.
+              Elle ne te répond pas, mais tu vois qu&rsquo;elle envoie des snaps à d&rsquo;autres. Lui t&rsquo;a
+              unfollow sans rien dire. AMZ Tracker te montre nom par nom qui est parti, qui ne te suit pas en
+              retour et qui te ment. Pour faire le tri, et couper ceux qui ne méritent pas ta place.
             </p>
             <div className="cta">
               <Link className="btn primary" href="/dashboard">Voir qui est parti</Link>
