@@ -4,7 +4,7 @@ import { INSTAGRAM_PATH, LogoMark, SNAPCHAT_PATH } from "@/components/Logos";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "AMZ Tracker — qui t'a unfollow, qui te ment";
+export const alt = "unfollowd by AMZ — qui t'a unfollow, qui te ment";
 
 function Tile({ bg, color, label, path }: { bg: string; color: string; label: string; path: string }) {
   return (
@@ -23,7 +23,7 @@ export default async function OpenGraph() {
       <div style={{ width: "100%", height: "100%", fontFamily: "Bricolage Grotesque", background: "#f4f3ee", color: "#0d0d0d", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 64 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <LogoMark size={72} />
-          <div style={{ display: "flex", fontSize: 48, fontWeight: 800, letterSpacing: -2 }}>AMZ Tracker</div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 14, fontSize: 56, fontWeight: 800, letterSpacing: -2 }}>unfollowd<span style={{ fontSize: 30, fontWeight: 800, color: "#55534d", letterSpacing: 0 }}>by AMZ</span></div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: 136, fontWeight: 800, lineHeight: 0.92, letterSpacing: -7 }}>
           <span>Qui t&apos;a unfollow.</span>

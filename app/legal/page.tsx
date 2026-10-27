@@ -1,4 +1,4 @@
-export const metadata = { title: "Mentions et confidentialité — AMZ Tracker" };
+export const metadata = { title: "Mentions et confidentialité — unfollowd" };
 
 export default function Page() {
   return (
@@ -10,7 +10,7 @@ export default function Page() {
         <h2 id="mentions">Mentions légales</h2>
         <p>Éditeur : [à compléter : nom ou raison sociale, contact].</p>
         <p>Hébergeur : Vercel Inc. (États-Unis).</p>
-        <p>AMZ Tracker n&rsquo;est affilié ni à Instagram, ni à Meta, ni à Snapchat, ni à Snap Inc. Ces noms et logos appartiennent à leurs propriétaires.</p>
+        <p>unfollowd (by AMZ) n&rsquo;est affilié ni à Instagram, ni à Meta, ni à Snapchat, ni à Snap Inc. Ces noms et logos appartiennent à leurs propriétaires.</p>
 
         <h2 id="confidentialite">Confidentialité</h2>
         <p>L&rsquo;outil lit les listes que ton compte peut déjà voir et en garde des captures datées, un nom par ligne.</p>

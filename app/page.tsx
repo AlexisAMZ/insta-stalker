@@ -23,7 +23,7 @@ export default function Home() {
           <div className="under">
             <p className="lede">
               Elle ne te répond pas, mais tu vois qu&rsquo;elle envoie des snaps à d&rsquo;autres. Lui t&rsquo;a
-              unfollow sans rien dire. AMZ Tracker te montre nom par nom qui est parti, qui ne te suit pas en
+              unfollow sans rien dire. unfollowd te montre nom par nom qui est parti, qui ne te suit pas en
               retour et qui te ment. Pour faire le tri, et couper ceux qui ne méritent pas ta place.
             </p>
             <div className="cta">
@@ -134,7 +134,7 @@ export default function Home() {
             <p>Là où tu regardes vraiment tes messages.</p>
           </div>
           <dl className="honest">
-            <div><dt>Installe le site</dt><dd>Ajoute AMZ Tracker à ton écran d&rsquo;accueil : il s&rsquo;ouvre comme une appli, sans passer par un store.</dd></div>
+            <div><dt>Installe le site</dt><dd>Ajoute unfollowd à ton écran d&rsquo;accueil : il s&rsquo;ouvre comme une appli, sans passer par un store.</dd></div>
             <div><dt>Alertes</dt><dd>Active la capture automatique : tu es prévenu dès qu&rsquo;un nom disparaît, sans rien refaire à la main.</dd></div>
             <div><dt>Capture depuis le mobile</dt><dd>En préparation. Pour l&rsquo;instant, la première capture se lance depuis un ordinateur.</dd></div>
           </dl>

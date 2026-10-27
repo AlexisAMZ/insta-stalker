@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 export const viewport = { themeColor: "#0d0d0d" };
 
 export const metadata: Metadata = {
-  title: "AMZ Tracker — qui t'a unfollow, qui te ment",
+  title: "unfollowd by AMZ — qui t'a unfollow, qui te ment",
   description:
     "Sur Instagram et Snapchat, vois qui t'a unfollow, qui ne te suit pas en retour et qui te dit l'inverse de sa liste. Fais le tri.",
 };

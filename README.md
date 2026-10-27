@@ -120,7 +120,7 @@ Seuls les noms qui **apparaissent ou disparaissent** entre deux captures compten
 ## 🧱 Structure
 
 ```
-├── app/ components/ lib/  # Site web AMZ Tracker (Next.js, racine du projet)
+├── app/ components/ lib/  # Site web unfollowd by AMZ (Next.js, racine du projet)
 ├── cli/
 │   ├── console-app.js     # Interface complète (coller dans la console)
 │   ├── console-capture.js # Version minimale, 100 % console, sans interface

@@ -16,7 +16,7 @@ The general public tracking **their own** account, to find out who unfollowed th
 
 ## Product Purpose
 
-AMZ Tracker turns the existing Instagram Followers Tracker (console capture + diff) into a website anyone can use: take a snapshot of your followers/following, take another later, and see exactly who arrived and who left. Success means a non-technical person gets their first diff without touching a terminal.
+unfollowd (by AMZ) turns the existing Instagram Followers Tracker (console capture + diff) into a website anyone can use: take a snapshot of your followers/following, take another later, and see exactly who arrived and who left. Success means a non-technical person gets their first diff without touching a terminal.
 
 ## Positioning
 
@@ -41,7 +41,7 @@ The Snapchat "who lies to you" signal can use more than the friend list (e.g. Sn
 
 ## Brand Commitments
 
-- Name: **AMZ Tracker**, shown with Instagram and Snapchat marks (user-specified).
+- Name: **unfollowd by AMZ** (domain unfollowd.com, bought by the owner), shown with Instagram and Snapchat marks. Previous working name: AMZ Tracker.
 - Language: French UI copy.
 
 ## Evidence on Hand

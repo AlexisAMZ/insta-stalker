@@ -12,7 +12,7 @@ export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
-  return { title: `@${handle} — AMZ Tracker` };
+  return { title: `@${handle} — unfollowd` };
 }
 
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {

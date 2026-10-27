@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "AMZ Tracker",
-    short_name: "AMZ",
+    name: "unfollowd by AMZ",
+    short_name: "unfollowd",
     description: "Qui t'a unfollow, qui te ment sur Instagram et Snapchat.",
     start_url: "/",
     display: "standalone",

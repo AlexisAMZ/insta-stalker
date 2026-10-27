@@ -57,7 +57,7 @@ export function BrandMarks({ size = 22 }: { size?: number }) {
 // (bande jaune Snapchat, triangle dégradé Instagram).
 export function LogoMark({ size = 32, className }: LogoProps) {
   return (
-    <svg viewBox="0 0 64 64" width={size} height={size} className={className} role="img" aria-label="AMZ Tracker">
+    <svg viewBox="0 0 64 64" width={size} height={size} className={className} role="img" aria-label="unfollowd by AMZ">
       <defs>
         <linearGradient id="amz-g" gradientUnits="userSpaceOnUse" x1="45" y1="0" x2="64" y2="19">
           <stop offset="0" stopColor="#fd8d32" />

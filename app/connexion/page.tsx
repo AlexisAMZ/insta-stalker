@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { InstagramMark, SnapchatMark } from "@/components/Logos";
 
-export const metadata = { title: "Connexion — AMZ Tracker" };
+export const metadata = { title: "Connexion — unfollowd" };
 
 export default function Page() {
   return (

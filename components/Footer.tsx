@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="foot">
       <div className="wrap">
-        <span>AMZ Tracker · maquette, données fictives</span>
+        <span>unfollowd by AMZ · maquette, données fictives</span>
         <span className="foot-links">
           <Link href="/alertes">Alertes</Link>
           <Link href="/legal">Mentions et confidentialité</Link>

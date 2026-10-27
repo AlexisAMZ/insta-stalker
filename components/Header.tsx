@@ -18,9 +18,9 @@ export default function Header() {
   return (
     <header className="top">
       <div className="wrap">
-        <Link href="/" className="brand" aria-label="AMZ Tracker, accueil">
+        <Link href="/" className="brand" aria-label="unfollowd by AMZ, accueil">
           <LogoMark size={32} />
-          AMZ Tracker
+          unfollowd<span className="by">by AMZ</span>
           <BrandMarks size={22} />
         </Link>
         <nav className="nav" aria-label="Navigation principale">

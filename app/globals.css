@@ -347,3 +347,6 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
   .timeline li { grid-template-columns: 1fr; gap: 2px; }
   .live-feed { min-height: 120px; font-size: 1.15rem; }
 }
+
+.by { font-family: var(--font-body); font-weight: 600; font-size: 0.72em; letter-spacing: 0; color: var(--ink-soft); margin-left: 8px; }
+.top .brand { gap: 10px; }
