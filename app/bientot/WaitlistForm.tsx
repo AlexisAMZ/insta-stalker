@@ -31,6 +31,9 @@ export default function WaitlistForm() {
   if (state.phase === "done") {
     return (
       <p className="soon-done" role="status">
+        <svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
+          <path d="M5 15 L11 21 L23 7" pathLength="1" />
+        </svg>
         {state.message}
       </p>
     );

@@ -13,4 +13,9 @@ export function isPublicPath(pathname: string, launched: boolean): boolean {
   return launched && pathname === "/";
 }
 
+/** Avant le lancement, l'adresse principale montre la page d'attente aux visiteurs sans accès. */
+export function teaserFor(pathname: string, launched: boolean): string | null {
+  return !launched && pathname === "/" ? "/bientot" : null;
+}
+
 export const NOINDEX = { index: false, follow: false } as const;

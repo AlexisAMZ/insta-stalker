@@ -387,9 +387,9 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 
 /* page d'attente */
 .soon { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; background: var(--snap); }
-.soon-box { width: min(560px, 100%); background: var(--bg); border-radius: var(--radius); padding: clamp(24px, 5vw, 52px); display: grid; gap: 18px; }
+.soon-box { width: min(640px, 100%); background: var(--bg); border-radius: var(--radius); padding: clamp(24px, 5vw, 52px); display: grid; gap: 18px; }
 .soon-box .brand { margin: 0; }
-.soon-box h1 { font-size: clamp(2.6rem, 8vw, 4.4rem); letter-spacing: -0.05em; }
+
 .soon-lede { color: var(--ink-soft); font-size: 1.1rem; }
 .soon-form { display: grid; gap: 14px; margin-top: 4px; }
 .soon-form .field input { width: 100%; }
@@ -406,3 +406,32 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 .consent-actions { display: flex; gap: 10px; }
 .consent-actions .btn { flex: 1; background: var(--bg); color: var(--ink); border-color: var(--bg); }
 .foot-btn { margin: 0; font-size: inherit; }
+
+/* page d'attente : titre et retours de formulaire */
+.soon-title { font-size: clamp(2.8rem, 9.5vw, 5rem); letter-spacing: -0.055em; line-height: 0.95; }
+.soon-title .w { display: inline-block; position: relative; }
+.soon-title .hl::before { content: ""; position: absolute; z-index: -1; inset: 0.1em -0.1em 0.02em; background: var(--snap); border-radius: 0.12em; transform-origin: left center; }
+.soon-sub { font-size: clamp(1.5rem, 4vw, 2rem); letter-spacing: -0.035em; margin-top: 8px; }
+.soon-done { display: flex; align-items: center; gap: 14px; }
+.soon-done svg { flex: none; overflow: visible; }
+.soon-done path { fill: none; stroke: var(--snap); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.soon-form .field input, .soon-form .btn { transition: box-shadow 0.25s var(--ease), transform 0.3s var(--ease), background 0.2s; }
+.soon-form .field input:focus-visible { box-shadow: 0 0 0 4px rgba(13, 13, 13, 0.14); }
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes soon-card { from { opacity: 0; transform: translateY(28px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @keyframes soon-word { from { opacity: 0; transform: translateY(0.55em); filter: blur(12px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  @keyframes soon-mark { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes soon-pop { from { opacity: 0; transform: scale(0.94) translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes soon-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes soon-nudge { 0%, 100% { transform: none; } 25% { transform: translateX(-5px); } 70% { transform: translateX(4px); } }
+
+  .soon-box { animation: soon-card 0.7s var(--ease) both; }
+  .soon-title .w { animation: soon-word 0.85s var(--ease) both; animation-delay: calc(var(--i) * 0.12s + 0.25s); }
+  .soon-title .hl::before { animation: soon-mark 0.6s var(--ease) both; animation-delay: 1.05s; }
+  .soon-lede, .soon-sub, .soon-form, .soon-note { animation: soon-pop 0.7s var(--ease) both; animation-delay: 1.5s; }
+  .soon-done { animation: soon-pop 0.5s var(--ease) both; }
+  .soon-done path { animation: soon-draw 0.5s var(--ease) 0.25s both; }
+  .soon-form .gate-err { animation: soon-nudge 0.4s var(--ease); }
+  .soon-form .btn:not([disabled]):hover { transform: translateY(-3px); }
+}

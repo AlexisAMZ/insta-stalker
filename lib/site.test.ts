@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { isLaunched, isPublicPath } from "./site.ts";
+import { isLaunched, isPublicPath, teaserFor } from "./site.ts";
 
 test("avant lancement : seules la page d'attente, les mentions et l'inscription sont publiques", () => {
   for (const p of ["/bientot", "/legal", "/api/waitlist", "/robots.txt", "/sitemap.xml"]) assert.equal(isPublicPath(p, false), true, p);
@@ -12,6 +12,12 @@ test("après lancement : l'accueil devient public, l'app reste privée", () => {
   for (const p of ["/dashboard", "/viewer", "/comparaison", "/a-degager", "/alertes", "/personne/x", "/api/viewer", "/connexion", "/partage"]) {
     assert.equal(isPublicPath(p, true), false, p);
   }
+});
+
+test("avant lancement, la racine montre la page d'attente", () => {
+  assert.equal(teaserFor("/", false), "/bientot");
+  assert.equal(teaserFor("/", true), null);
+  for (const p of ["/dashboard", "/viewer", "/bientot", "/acces"]) assert.equal(teaserFor(p, false), null, p);
 });
 
 test("interrupteur de lancement", () => {

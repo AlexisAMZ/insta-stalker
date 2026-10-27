@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { ACCESS_COOKIE, expectedToken, timingSafeEqual } from "@/lib/access";
-import { isLaunched, isPublicPath } from "@/lib/site";
+import { isLaunched, isPublicPath, teaserFor } from "@/lib/site";
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
@@ -9,6 +9,9 @@ export async function middleware(req: NextRequest) {
   const cookie = req.cookies.get(ACCESS_COOKIE)?.value;
   const expected = await expectedToken();
   if (expected && cookie && timingSafeEqual(cookie, expected)) return NextResponse.next();
+
+  const teaser = teaserFor(pathname, isLaunched());
+  if (teaser) return NextResponse.rewrite(new URL(teaser, req.url));
 
   const url = req.nextUrl.clone();
   url.pathname = "/acces";
