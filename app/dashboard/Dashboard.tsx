@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import PlatformSwitch from "@/components/PlatformSwitch";
 import { Avatar } from "@/components/Person";
-import { ACCOUNT, ARRIVED, CAPTURES, LEFT, PLATFORM_LABEL, type Platform } from "@/lib/sample";
+import { ACCOUNT, CAPTURES, LEFT, NOT_BACK, PLATFORM_LABEL, type Platform } from "@/lib/sample";
 
 export default function Dashboard() {
   const [platform, setPlatform] = useState<Platform>("instagram");
@@ -72,6 +72,11 @@ export default function Dashboard() {
             <table className="ledger">
               <tbody>
                 <tr>
+                  <th scope="row">{label.lost}</th>
+                  <td className="big num down">{LEFT.length}</td>
+                  <td className="delta num">depuis le 20 oct.</td>
+                </tr>
+                <tr>
                   <th scope="row">{isIg ? "Abonnés" : "Amis"}</th>
                   <td className="big num">{acc.followers.toLocaleString("fr-FR")}</td>
                   <td className="delta num"><span className="up">+8</span> / <span className="down">−6</span></td>
@@ -84,9 +89,9 @@ export default function Dashboard() {
                   </tr>
                 )}
                 <tr>
-                  <th scope="row">{isIg ? "Ne te suivent pas en retour" : "Amis non ajoutés en retour"}</th>
+                  <th scope="row">{label.notBack}</th>
                   <td className="big num">{isIg ? 94 : 12}</td>
-                  <td className="delta num">depuis le 20 oct.</td>
+                  <td className="delta num">au total</td>
                 </tr>
               </tbody>
             </table>
@@ -110,13 +115,13 @@ export default function Dashboard() {
         </div>
 
         <div className="two">
-          <section className="panel col in">
-            <h3>{label.gained} <span className="num">+{ARRIVED.length}</span></h3>
+          <section className="panel col out">
+            <h3>{label.lost} <span className="num">{LEFT.length}</span></h3>
             <ul className="list">
-              {ARRIVED.slice(0, 5).map((m) => (
+              {LEFT.slice(0, 5).map((m) => (
                 <li key={m.handle}>
                   <Avatar name={m.name} hue={m.hue} />
-                  <span className="who"><b>@{m.handle}</b><small>{m.name}</small></span>
+                  <span className="who"><b>@{m.handle}</b><small>{m.note ?? m.name}</small></span>
                   <span className="when">{m.when}</span>
                 </li>
               ))}
@@ -124,9 +129,9 @@ export default function Dashboard() {
             <Link className="more" href="/comparaison">Tout voir →</Link>
           </section>
           <section className="panel col out">
-            <h3>{label.lost} <span className="num">−{LEFT.length}</span></h3>
+            <h3>{label.notBack} <span className="num">{NOT_BACK.length}</span></h3>
             <ul className="list">
-              {LEFT.slice(0, 5).map((m) => (
+              {NOT_BACK.map((m) => (
                 <li key={m.handle}>
                   <Avatar name={m.name} hue={m.hue} />
                   <span className="who"><b>@{m.handle}</b><small>{m.note ?? m.name}</small></span>

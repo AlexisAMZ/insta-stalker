@@ -12,7 +12,7 @@ Next.js (App Router). The site lives at the repo root (Vercel-ready); the consol
 
 ## Users
 
-The general public tracking **their own** account: someone who wants to know who followed them, who unfollowed them, and who they stopped following, on Instagram and Snapchat. Not aimed at monitoring other people.
+The general public tracking **their own** account, to find out who unfollowed them, who doesn't follow back, and who says one thing while their list says another (Snapchat: who removed them while claiming otherwise) — in order to sort their circle and cut out toxic people. Not aimed at monitoring other people.
 
 ## Product Purpose
 
@@ -47,7 +47,8 @@ Snapshot-and-diff, read-only: the tool only reads lists you can already see, nev
 
 ## Product Principles
 
-1. Names over numbers: the value is *who* moved, not a vanity counter.
-2. Read-only and honest: say plainly what the tool does and does not do.
-3. Two captures to first insight: everything serves the first diff.
-4. Explain gaps: a missing count is deactivated accounts, not a bug — say so.
+1. Names over numbers: the value is *who* left or lied, not a vanity counter.
+2. Facts, not verdicts: an unfollow is a fact, never proof of intent. The tool shows the list; the user decides who to cut.
+3. Read-only and honest: say plainly what the tool does and does not do.
+4. Two captures to first insight: everything serves the first diff.
+5. Explain gaps: a missing count is deactivated accounts, not a bug — say so.

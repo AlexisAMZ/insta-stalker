@@ -3,22 +3,31 @@
 import { useMemo, useState } from "react";
 import PlatformSwitch from "@/components/PlatformSwitch";
 import { Avatar } from "@/components/Person";
-import { ARRIVED, CAPTURES, LEFT, PLATFORM_LABEL, type Platform } from "@/lib/sample";
+import { ARRIVED, CAPTURES, LEFT, NOT_BACK, PLATFORM_LABEL, type Platform } from "@/lib/sample";
 
-type Filter = "all" | "in" | "out";
+type Filter = "all" | "out" | "back" | "in";
 
 export default function Compare() {
   const [platform, setPlatform] = useState<Platform>("instagram");
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<Filter>("out");
   const [q, setQ] = useState("");
   const [from, setFrom] = useState("c3");
   const [to, setTo] = useState("c4");
+  const [cut, setCut] = useState<ReadonlySet<string>>(new Set());
+  const toggleCut = (h: string) =>
+    setCut((prev) => {
+      const next = new Set(prev);
+      if (next.has(h)) next.delete(h);
+      else next.add(h);
+      return next;
+    });
   const label = PLATFORM_LABEL[platform];
 
   const rows = useMemo(() => {
     const all = [
-      ...ARRIVED.map((m) => ({ ...m, kind: "in" as const })),
       ...LEFT.map((m) => ({ ...m, kind: "out" as const })),
+      ...NOT_BACK.map((m) => ({ ...m, kind: "back" as const })),
+      ...ARRIVED.map((m) => ({ ...m, kind: "in" as const })),
     ];
     const needle = q.trim().toLowerCase();
     return all.filter(
@@ -34,7 +43,7 @@ export default function Compare() {
         <div className="page-head">
           <div>
             <h1>Comparaison</h1>
-            <p>Deux captures, face à face : qui est entré, qui est sorti.</p>
+            <p>Deux captures, face à face : qui est parti, qui ne te suit pas, qui est à couper.</p>
           </div>
           <PlatformSwitch value={platform} onChange={setPlatform} />
         </div>
@@ -64,13 +73,13 @@ export default function Compare() {
         </div>
 
         <div className="summary" aria-live="polite">
-          <span><strong className="num up">+{ARRIVED.length}</strong>{label.gained.toLowerCase()}</span>
-          <span><strong className="num down">−{LEFT.length}</strong>{label.lost.toLowerCase()}</span>
-          <span>entre le {CAPTURES.find((c) => c.id === from)?.date.split(" · ")[0]} et le {CAPTURES.find((c) => c.id === to)?.date.split(" · ")[0]}</span>
+          <span><strong className="num down">{LEFT.length}</strong>{label.lost.toLowerCase()}</span>
+          <span><strong className="num">{NOT_BACK.length}</strong>{label.notBack.toLowerCase()}</span>
+          <span><strong className="num">{cut.size}</strong>à couper</span>
         </div>
 
         <div className="seg" role="group" aria-label="Filtrer" style={{ marginBottom: 16 }}>
-          {([["all", "Tout"], ["in", label.gained], ["out", label.lost]] as const).map(([k, t]) => (
+          {([["out", label.lost], ["back", label.notBack], ["in", label.gained], ["all", "Tout"]] as const).map(([k, t]) => (
             <button key={k} type="button" aria-pressed={filter === k} onClick={() => setFilter(k)}>{t}</button>
           ))}
         </div>
@@ -87,8 +96,10 @@ export default function Compare() {
                     <b>@{r.handle}</b>
                     <small>{r.note ?? r.name}</small>
                   </span>
-                  <span className={`badge ${r.kind}`}>{r.kind === "in" ? label.gained.replace(/s$/, "") : label.lost.replace(/s$/, "")}</span>
-                  <span className="when">{r.when}</span>
+                  <span className={`badge ${r.kind}`}>{r.kind === "in" ? label.badgeIn : r.kind === "back" ? label.badgeBack : label.badgeOut}</span>
+                  <button type="button" className="flag" aria-pressed={cut.has(r.handle)} onClick={() => toggleCut(r.handle)}>
+                    {cut.has(r.handle) ? "À couper ✓" : "À couper ?"}
+                  </button>
                 </li>
               ))}
             </ul>

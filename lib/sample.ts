@@ -12,9 +12,12 @@ export type Moved = {
 
 export type Capture = { id: string; label: string; date: string; count: number };
 
-export const PLATFORM_LABEL: Record<Platform, { name: string; follows: string; gained: string; lost: string }> = {
-  instagram: { name: "Instagram", follows: "abonnés", gained: "Arrivées", lost: "Départs" },
-  snapchat: { name: "Snapchat", follows: "amis", gained: "Ajouts", lost: "Retraits" },
+export const PLATFORM_LABEL: Record<
+  Platform,
+  { name: string; follows: string; gained: string; lost: string; notBack: string; badgeOut: string; badgeBack: string; badgeIn: string }
+> = {
+  instagram: { name: "Instagram", follows: "abonnés", gained: "Arrivées", lost: "Ils t'ont unfollow", notBack: "Ne te suivent pas en retour", badgeOut: "Unfollow", badgeBack: "Ne te suit pas", badgeIn: "Arrivée" },
+  snapchat: { name: "Snapchat", follows: "amis", gained: "Ajouts", lost: "Ils t'ont retiré", notBack: "Ne t'ont pas ajouté en retour", badgeOut: "Retiré", badgeBack: "Ne t'a pas ajouté", badgeIn: "Ajout" },
 };
 
 const mk = (handle: string, name: string, hue: number, when: string, note?: string): Moved => ({
@@ -43,6 +46,21 @@ export const LEFT: Moved[] = [
   mk("marie.lou", "Marie-Lou", 240, "il y a 4 j"),
   mk("drakkar_77", "drakkar", 55, "il y a 5 j", "Te suivait depuis 3 sem."),
   mk("ines.vrt", "Inès V.", 120, "il y a 6 j"),
+];
+
+export const NOT_BACK: Moved[] = [
+  mk("kev_ofc", "Kévin", 260, "depuis 5 mois", "Tu le suis, il ne te suit pas"),
+  mk("ju.lia_", "Julia", 330, "depuis 1 an", "Tu la suis, elle ne te suit pas"),
+  mk("matt.zv", "Matt", 100, "depuis 3 mois", "Tu le suis, il ne te suit pas"),
+  mk("sarah.bnt", "Sarah B.", 45, "depuis 2 ans", "Tu la suis, elle ne te suit pas"),
+];
+
+export type Contradiction = { handle: string; name: string; hue: number; said: string; fact: string };
+
+export const CONTRADICTIONS: Contradiction[] = [
+  { handle: "enzo_bz", name: "Enzo", hue: 20, said: "« Mais non, on est toujours potes. »", fact: "Il t'a retiré de ses amis il y a 12 jours." },
+  { handle: "lola.mrt", name: "Lola", hue: 300, said: "« Je t'ai jamais bloquée. »", fact: "Elle n'apparaît plus dans ta liste depuis le 6 oct." },
+  { handle: "hugo.k", name: "Hugo", hue: 160, said: "« Je viens de t'ajouter. »", fact: "Il n'est pas dans ta liste d'amis." },
 ];
 
 export const CAPTURES: Capture[] = [

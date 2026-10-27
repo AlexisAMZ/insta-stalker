@@ -5,9 +5,9 @@ import Header from "@/components/Header";
 export const viewport = { themeColor: "#0d0d0d" };
 
 export const metadata: Metadata = {
-  title: "AMZ Tracker — qui t'a suivi, qui est parti",
+  title: "AMZ Tracker — qui t'a unfollow, qui te ment",
   description:
-    "Fais l'appel de tes abonnés Instagram et de tes amis Snapchat : une capture, une autre plus tard, et la liste exacte des arrivées et des départs.",
+    "Sur Instagram et Snapchat, vois qui t'a unfollow, qui ne te suit pas en retour et qui te dit l'inverse de sa liste. Fais le tri.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

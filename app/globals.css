@@ -218,7 +218,7 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
   .steps li { grid-template-columns: 56px 1fr; }
   .steps li::before { font-size: 3rem; }
   .rows li { grid-template-columns: 44px 1fr auto; }
-  .rows .when { display: none; }
+  .rows .badge { display: none; }
   .ledger th { font-size: 0.95rem; }
   .ledger th, .ledger td { padding: 16px 4px; }
   .ledger td.delta { white-space: normal; font-size: 0.85rem; }
@@ -234,3 +234,18 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 .gate-form { display: grid; gap: 14px; margin-top: 8px; }
 .gate-form .field input { width: 100%; }
 .gate-err { color: var(--out); font-weight: 600; }
+
+/* ton « tri » : bandeau Snap, contradictions, marquage */
+.band.snap { background: var(--snap); color: var(--ink); }
+.band-lede { margin-top: 12px; font-size: 1.1rem; max-width: 34em; }
+.lies { list-style: none; margin: clamp(24px, 4vw, 40px) 0 0; padding: 0; border-top: 2px solid var(--ink); }
+.lies li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding-block: 24px; border-bottom: 1px solid rgba(13, 13, 13, 0.25); align-items: start; }
+.lies .handle { font-weight: 700; }
+.lies .said { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.1rem); letter-spacing: -0.03em; line-height: 1.1; margin-top: 4px; }
+.lies .fact { margin-top: 8px; font-weight: 600; }
+.lies .fact::before { content: "La liste dit : "; font-weight: 500; opacity: 0.7; }
+.badge.back { background: #ffe9c7; color: #8a4b00; }
+.flag { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 700 0.85rem var(--font-body); cursor: pointer; white-space: nowrap; }
+.flag:hover { background: rgba(13, 13, 13, 0.07); }
+.flag[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.rows li { grid-template-columns: 44px 1fr auto auto; }

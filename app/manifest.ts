@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "AMZ Tracker",
     short_name: "AMZ",
-    description: "Qui t'a suivi, qui est parti sur Instagram et Snapchat.",
+    description: "Qui t'a unfollow, qui te ment sur Instagram et Snapchat.",
     start_url: "/",
     display: "standalone",
     background_color: "#f4f3ee",

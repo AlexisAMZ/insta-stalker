@@ -4,7 +4,7 @@ import { INSTAGRAM_PATH, LogoMark, SNAPCHAT_PATH } from "@/components/Logos";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "AMZ Tracker — qui t'a suivi, qui est parti";
+export const alt = "AMZ Tracker — qui t'a unfollow, qui te ment";
 
 function Tile({ bg, color, label, path }: { bg: string; color: string; label: string; path: string }) {
   return (
@@ -26,8 +26,8 @@ export default async function OpenGraph() {
           <div style={{ display: "flex", fontSize: 48, fontWeight: 800, letterSpacing: -2 }}>AMZ Tracker</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: 136, fontWeight: 800, lineHeight: 0.92, letterSpacing: -7 }}>
-          <span>Qui t&apos;a suivi.</span>
-          <span>Qui est parti.</span>
+          <span>Qui t&apos;a unfollow.</span>
+          <span>Qui te ment.</span>
         </div>
         <div style={{ display: "flex", gap: 20 }}>
           <Tile bg="linear-gradient(140deg, #f9ce34, #ee2a7b 50%, #6228d7)" color="#ffffff" label="Instagram" path={INSTAGRAM_PATH} />
