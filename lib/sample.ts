@@ -60,6 +60,7 @@ export type Contradiction = { handle: string; name: string; hue: number; said: s
 export const CONTRADICTIONS: Contradiction[] = [
   { handle: "enzo_bz", name: "Enzo", hue: 20, said: "« Mais non, on est toujours potes. »", fact: "Il t'a retiré de ses amis il y a 12 jours." },
   { handle: "lola.mrt", name: "Lola", hue: 300, said: "« Je t'ai jamais bloquée. »", fact: "Elle n'apparaît plus dans ta liste depuis le 6 oct." },
+  { handle: "chloe.rnd", name: "Chloé", hue: 190, said: "« Désolée, je suis occupée là, je te réponds plus tard. »", fact: "Elle était active sur Snap il y a 3 minutes." },
   { handle: "hugo.k", name: "Hugo", hue: 160, said: "« Je viens de t'ajouter. »", fact: "Il n'est pas dans ta liste d'amis." },
 ];
 
