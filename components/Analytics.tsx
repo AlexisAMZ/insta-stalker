@@ -69,7 +69,7 @@ export default function Analytics() {
         <div className="consent" role="dialog" aria-label="Cookies et mesure d'audience">
           <p>
             Avec ton accord, on mesure les visites avec Google Analytics pour savoir d&rsquo;où tu viens. Sans ton accord, rien n&rsquo;est déposé.{" "}
-            <a href="/legal#audience">En savoir plus</a>
+            <a href="/bientot#confidentialite">En savoir plus</a>
           </p>
           <div className="consent-actions">
             <button type="button" className="btn small" onClick={() => choose("denied")}>Refuser</button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { unlock, type AccessState } from "./actions";
+import { unlock, type AccessState } from "@/app/acces/actions";
 
 export default function AccessForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState<AccessState, FormData>(unlock, {});

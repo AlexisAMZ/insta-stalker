@@ -226,11 +226,6 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
 }
 
 /* accès */
-.gate { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; background: var(--snap); }
-.gate-box { width: min(480px, 100%); background: var(--bg); border-radius: var(--radius); padding: clamp(24px, 5vw, 48px); display: grid; gap: 16px; }
-.gate-box .brand { margin: 0; }
-.gate-box h1 { font-size: clamp(2.6rem, 8vw, 4rem); letter-spacing: -0.05em; }
-.gate-lede { color: var(--ink-soft); }
 .gate-form { display: grid; gap: 14px; margin-top: 8px; }
 .gate-form .field input { width: 100%; }
 .gate-err { color: var(--out); font-weight: 600; }
@@ -435,3 +430,20 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
   .soon-form .gate-err { animation: soon-nudge 0.4s var(--ease); }
   .soon-form .btn:not([disabled]):hover { transform: translateY(-3px); }
 }
+
+/* accès admin dans la page d'attente */
+.admin { border-top: 1px solid var(--rule); padding-top: 14px; display: grid; gap: 12px; }
+.admin-toggle { justify-self: start; padding: 6px 0; border: 0; background: none; font: 600 0.88rem var(--font-body); color: var(--ink-soft); text-decoration: underline; text-underline-offset: 0.22em; cursor: pointer; }
+.admin-toggle:hover { color: var(--ink); }
+.admin-panel .gate-form { margin-top: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .admin-panel { animation: soon-pop 0.35s var(--ease) both; }
+}
+
+.privacy { font-size: 0.88rem; color: var(--ink-soft); }
+.privacy summary { cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 0.22em; list-style: none; padding: 4px 0; }
+.privacy summary::-webkit-details-marker { display: none; }
+.privacy p { margin-top: 8px; }
+.privacy, .privacy:first-child { border: 0; }
+.privacy summary { display: block; font: 600 0.88rem var(--font-body); letter-spacing: 0; }
+.privacy summary::after { content: none; }

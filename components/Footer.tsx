@@ -1,12 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { reopenConsent } from "./Analytics";
 
 export default function Footer() {
-  const path = usePathname();
-  if (path.startsWith("/acces") || path.startsWith("/bientot")) return null;
   return (
     <footer className="foot">
       <div className="wrap">

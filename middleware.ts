@@ -10,8 +10,14 @@ export async function middleware(req: NextRequest) {
   const expected = await expectedToken();
   if (expected && cookie && timingSafeEqual(cookie, expected)) return NextResponse.next();
 
+  // Visiteur sans accès : les API privées n'existent pas, toute page affiche la page d'attente (même adresse).
+  if (pathname.startsWith("/api/")) return NextResponse.json({ error: "Introuvable" }, { status: 404 });
   const teaser = teaserFor(pathname, isLaunched());
-  if (teaser) return NextResponse.rewrite(new URL(teaser, req.url));
+  if (teaser) {
+    const url = new URL(teaser, req.url);
+    if (pathname !== "/") url.searchParams.set("next", pathname + search);
+    return NextResponse.rewrite(url);
+  }
 
   const url = req.nextUrl.clone();
   url.pathname = "/acces";
