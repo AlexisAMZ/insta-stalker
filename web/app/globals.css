@@ -224,3 +224,13 @@ details p { padding-bottom: 24px; color: var(--ink-soft); max-width: 40em; }
   .ledger td.delta { white-space: normal; font-size: 0.85rem; }
   .seg button { padding: 0 14px; }
 }
+
+/* accès */
+.gate { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; background: var(--snap); }
+.gate-box { width: min(480px, 100%); background: var(--bg); border-radius: var(--radius); padding: clamp(24px, 5vw, 48px); display: grid; gap: 16px; }
+.gate-box .brand { margin: 0; }
+.gate-box h1 { font-size: clamp(2.6rem, 8vw, 4rem); letter-spacing: -0.05em; }
+.gate-lede { color: var(--ink-soft); }
+.gate-form { display: grid; gap: 14px; margin-top: 8px; }
+.gate-form .field input { width: 100%; }
+.gate-err { color: var(--out); font-weight: 600; }

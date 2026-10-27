@@ -12,6 +12,7 @@ const LINKS = [
 
 export default function Header() {
   const path = usePathname();
+  if (path.startsWith("/acces")) return null;
   return (
     <header className="top">
       <div className="wrap">
