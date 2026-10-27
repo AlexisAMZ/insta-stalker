@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BrandMarks } from "./Logos";
+import { BrandMarks, LogoMark } from "./Logos";
 
 const LINKS = [
   { href: "/", label: "Accueil" },
@@ -17,6 +17,7 @@ export default function Header() {
     <header className="top">
       <div className="wrap">
         <Link href="/" className="brand" aria-label="AMZ Tracker, accueil">
+          <LogoMark size={32} />
           AMZ Tracker
           <BrandMarks size={22} />
         </Link>
