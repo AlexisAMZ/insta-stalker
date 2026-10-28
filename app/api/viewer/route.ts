@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { isValidHandle, normalizeHandle, parseProfile, parseStories, type IgProfile, type IgStoryItem } from "@/lib/instagram";
+import { denyUnlessAccess } from "@/lib/require-access";
 import { allowShared, clientIp } from "@/lib/ratelimit";
 import { hasIgSession, igJson, profileUrl, storiesUrl, UpstreamError } from "@/lib/scrapfly";
 
@@ -12,6 +13,9 @@ const TTL_MS = 5 * 60_000;
 const fail = (error: string, status: number) => NextResponse.json({ error }, { status });
 
 export async function GET(req: NextRequest) {
+  const denied = await denyUnlessAccess(req);
+  if (denied) return denied;
+
   const handle = normalizeHandle(req.nextUrl.searchParams.get("u") ?? "");
   if (!isValidHandle(handle)) return fail("Pseudo invalide. Exemple : @nom.utilisateur", 400);
 

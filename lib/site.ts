@@ -5,7 +5,7 @@ export const SITE_NAME = "unfollowd by AMZ";
 export const isLaunched = (env: Record<string, string | undefined> = process.env) => env.SITE_LAUNCHED === "1";
 
 // Toujours publiques : la page d'attente, l'API d'inscription, robots et sitemap. Rien d'autre.
-const ALWAYS_PUBLIC = new Set(["/bientot", "/api/waitlist", "/robots.txt", "/sitemap.xml"]);
+const ALWAYS_PUBLIC = new Set(["/bientot", "/api/waitlist", "/api/waitlist/confirm", "/robots.txt", "/sitemap.xml"]);
 const PUBLIC_AFTER_LAUNCH = new Set(["/", "/legal"]);
 
 /** Pages ouvertes au public. Avant le lancement : uniquement la page d'attente. */

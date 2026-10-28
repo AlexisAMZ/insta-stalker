@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { isLaunched, isPublicPath, teaserFor } from "./site.ts";
 
 test("avant lancement : seule la page d'attente (et son API) est publique", () => {
-  for (const p of ["/bientot", "/api/waitlist", "/robots.txt", "/sitemap.xml"]) assert.equal(isPublicPath(p, false), true, p);
+  for (const p of ["/bientot", "/api/waitlist", "/api/waitlist/confirm", "/robots.txt", "/sitemap.xml"]) assert.equal(isPublicPath(p, false), true, p);
   for (const p of ["/", "/legal", "/dashboard", "/viewer", "/api/viewer", "/api/media", "/partage"]) assert.equal(isPublicPath(p, false), false, p);
 });
 

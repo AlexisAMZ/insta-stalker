@@ -11,16 +11,36 @@ export function configuredPassword(env: Env = process.env): string | null {
 
 const hex = (buf: ArrayBuffer) => Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
 
-async function hmac(secret: string, message: string): Promise<string> {
+export const MIN_SECRET_LENGTH = 32;
+const DEV_SECRET = "dev-secret-dev-secret-dev-secret-0";
+
+/** Secret de signature. En production, AMZ_SECRET est OBLIGATOIRE (≥ 32 caractères) et distinct du mot de passe : sinon l'accès reste fermé. */
+export function configuredSecret(env: Env = process.env): string | null {
+  const secret = env.AMZ_SECRET;
+  if (secret) return secret.length >= MIN_SECRET_LENGTH && secret !== env.AMZ_PASSWORD ? secret : null;
+  return env.NODE_ENV === "production" ? null : DEV_SECRET;
+}
+
+export async function hmac(secret: string, message: string): Promise<string> {
   const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   return hex(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(message)));
 }
 
-/** Valeur du cookie d'accès : signature HMAC, impossible à déduire du mot de passe sans le secret. */
-export async function expectedToken(env: Env = process.env): Promise<string | null> {
-  const password = configuredPassword(env);
-  if (!password) return null;
-  return hmac(env.AMZ_SECRET ?? password, "unfollowd:access:v2");
+/** Jeton de session « exp.nonce.signature » : l'expiration est signée et vérifiée côté serveur. */
+export async function issueToken(env: Env = process.env, now = Date.now(), ttlMs = ACCESS_MAX_AGE * 1000): Promise<string | null> {
+  const secret = configuredSecret(env);
+  if (!secret || !configuredPassword(env)) return null;
+  const exp = now + ttlMs;
+  const nonce = crypto.randomUUID();
+  return `${exp}.${nonce}.${await hmac(secret, `access:v3:${exp}.${nonce}`)}`;
+}
+
+export async function verifyToken(token: string | undefined | null, env: Env = process.env, now = Date.now()): Promise<boolean> {
+  const secret = configuredSecret(env);
+  if (!token || !secret || !configuredPassword(env)) return false;
+  const [exp, nonce, sig, extra] = token.split(".");
+  if (!exp || !nonce || !sig || extra !== undefined || !/^\d{1,15}$/.test(exp) || Number(exp) < now) return false;
+  return timingSafeEqual(sig, await hmac(secret, `access:v3:${exp}.${nonce}`));
 }
 
 export function timingSafeEqual(a: string, b: string): boolean {

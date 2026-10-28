@@ -16,7 +16,7 @@ export function allow(key: string, max: number, windowMs: number, now = Date.now
 }
 
 /** Limite partagée entre toutes les instances (Postgres) ; retombe sur la mémoire si la base est indisponible. */
-export async function allowShared(key: string, max: number, windowMs: number): Promise<boolean> {
+export async function allowShared(key: string, max: number, windowMs: number, opts: { failClosed?: boolean } = {}): Promise<boolean> {
   if (hasDb()) {
     try {
       const rows = await sql()`
@@ -30,7 +30,8 @@ export async function allowShared(key: string, max: number, windowMs: number): P
       if (Math.random() < 0.01) void sql()`DELETE FROM rate_limits WHERE reset_at < now() - interval '1 day'`.catch(() => {});
       return Number(rows[0]?.count) <= max;
     } catch {
-      /* base indisponible : on retombe sur la limite locale */
+      /* base indisponible : refus si failClosed, sinon limite locale */
+      if (opts.failClosed) return false;
     }
   }
   return allow(key, max, windowMs);

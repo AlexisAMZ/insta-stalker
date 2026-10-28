@@ -1,14 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ACCESS_COOKIE, expectedToken, timingSafeEqual } from "@/lib/access";
+import { ACCESS_COOKIE, verifyToken } from "@/lib/access";
 import { isLaunched, isPublicPath, teaserFor } from "@/lib/site";
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   if (pathname.startsWith("/acces") || isPublicPath(pathname, isLaunched())) return NextResponse.next();
 
-  const cookie = req.cookies.get(ACCESS_COOKIE)?.value;
-  const expected = await expectedToken();
-  if (expected && cookie && timingSafeEqual(cookie, expected)) return NextResponse.next();
+  if (await verifyToken(req.cookies.get(ACCESS_COOKIE)?.value)) return NextResponse.next();
 
   // Visiteur sans accès : les API privées n'existent pas, toute page affiche la page d'attente (même adresse).
   if (pathname.startsWith("/api/")) return NextResponse.json({ error: "Introuvable" }, { status: 404 });
