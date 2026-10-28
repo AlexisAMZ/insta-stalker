@@ -16,12 +16,19 @@
    5. Boutons « Télécharger » dans chaque onglet → fichiers pour le projet :
         ./cli/track import <profil> ~/Downloads/abonnes_*.txt ~/Downloads/abonnements_*.txt
 
+   Capture : sur instagram.com, les listes sont lues via l'API interne (pages de 50,
+   pauses aléatoires, attente si Instagram demande de patienter, reprise après
+   interruption, bouton Pause). Si l'API ne répond pas, le script retombe sur
+   le défilement du panneau. Une capture incomplète est marquée « partielle »
+   et jamais gardée comme référence ; une capture complète est mémorisée dans
+   le navigateur et comparée automatiquement à la suivante.
+
    ⚠️  LECTURE SEULE : le script fait défiler les listes et lit les noms.
    Il ne clique QUE sur les liens « abonnés / abonnements » du profil pour
    basculer (comme si tu cliquais toi-même). Aucun follow, like, message.
 
    Console : ift.stop() · ift.clear() · ift.count · ift.lignes · ift.listes
-             ift.list() · ift.copy() · ift.download() · ift.fermer()
+             ift.list() · ift.copy() · ift.download() · ift.pause() · ift.fermer()
    ift.profil("nom") : forcer un autre compte (utile depuis une page qui n'est
    pas un profil) ; sinon, c'est toujours LA PAGE OÙ TU ES qui est ciblée.
    ——————————————————————————————————————————————————————————————————————————— */
@@ -241,12 +248,14 @@
   }
 
   // ————— téléchargements — nom complet : profil_liste_date_heure.txt
-  const nomFichier = (t) => `${cible}_${t}_${stamp()}.txt`;
+  const MARQUE_PARTIEL = "# CAPTURE PARTIELLE — ne pas utiliser comme référence de comparaison";
+  const nomFichier = (t, partiel = false) => `${cible}_${t}_${stamp()}${partiel ? "_partiel" : ""}.txt`;
   function telechargerListe(t) {
     const r = resultats[t];
     if (!r) return toast("Rien à télécharger pour « " + motType(t) + " ».", "warning");
-    telechargerFichier(r.noms.join("\n") + "\n", nomFichier(t));
-    toast(`${r.noms.length} ${motType(t)} enregistrés.`, "success");
+    const entete = r.partiel ? MARQUE_PARTIEL + "\n" : "";
+    telechargerFichier(entete + r.noms.join("\n") + "\n", nomFichier(t, r.partiel));
+    toast(`${r.noms.length} ${motType(t)} enregistrés${r.partiel ? " (partiel)" : ""}.`, r.partiel ? "warning" : "success");
   }
   function telechargerFichier(contenu, nom) {
     const a = document.createElement("a");
@@ -444,6 +453,7 @@
         <div class="ift-bloc">
           <h3>Capture</h3>
           <button id="ift-scan">${icone.scan} Lancer la capture</button>
+          <button class="ift-bouton" id="ift-pause" style="display:none;width:100%;justify-content:center;margin-top:8px">Pause</button>
           <div class="ift-avance"><i id="ift-prog"></i></div>
           <div class="ift-statut" id="ift-statut">Prête. La capture enchaîne abonnés puis abonnements.</div>
         </div>
@@ -489,8 +499,8 @@
     const c = $("#ift-puces");
     c.innerHTML = Object.keys(resultats).length
       ? Object.entries(resultats).map(([t, r]) =>
-          `<span class="ift-puce ${r.annonce && r.noms.length < r.annonce && r.lignes < r.annonce ? "rose" : "ok"}">
-            <span class="point"></span>${motType(t)} <b>${r.noms.length}</b>${r.annonce ? `<span>/${r.annonce}</span>` : ""}</span>`
+          `<span class="ift-puce ${r.partiel || (r.annonce && r.noms.length < r.annonce && r.lignes < r.annonce) ? "rose" : "ok"}">
+            <span class="point"></span>${motType(t)}${r.partiel ? " (partiel)" : ""} <b>${r.noms.length}</b>${r.annonce ? `<span>/${r.annonce}</span>` : ""}</span>`
         ).join("")
       : `<span class="ift-puce"><span class="point"></span>Aucune capture</span>`;
   }
@@ -540,6 +550,7 @@
         <button class="ift-bouton" data-action="copier" data-type="${t}">${icone.copier} Copier</button>
         <button class="ift-bouton" data-action="dl" data-type="${t}">${icone.fichier} Télécharger</button>
       </div>
+      ${r.partiel ? `<div class="ift-statut" style="margin-bottom:8px;color:var(--rose)">⚠️ Capture incomplète : relance « Lancer la capture » pour reprendre là où elle s'est arrêtée. Elle n'est pas gardée comme référence.</div>` : ""}
       <div class="ift-statut" style="margin-bottom:12px">${r.noms.length} ${motType(t)}${r.annonce ? ` sur ${r.annonce} annoncés` : ""}${r.sansNom ? ` · ${r.sansNom} ligne${r.sansNom > 1 ? "s" : ""} sans nom (comptes supprimés/désactivés)` : ""}</div>
       <div id="ift-resultat">${listeHTML(t)}</div>`;
   }
@@ -576,24 +587,49 @@
     </div>`;
   }
 
+  const refsAuto = {};   // type -> référence automatique (capture précédente gardée dans le navigateur)
+  const refPour = (t) => (reference && reference.type === t ? reference : refsAuto[t] || null);
+
+  // arrivés / partis / renommés. Les @ renommés (même identifiant, nouveau nom)
+  // ne comptent pas comme un départ suivi d'une arrivée. Une capture partielle
+  // ne dit rien des « partis » : ils seraient simplement non lus.
+  function calculerDiff(ref, actuelle) {
+    const courants = new Set(actuelle.noms);
+    let arrives = actuelle.noms.filter((u) => !ref.noms.has(u));
+    let partis = actuelle.partiel ? [] : [...ref.noms].filter((u) => !courants.has(u));
+    const renommes = [];
+    if (ref.ids && actuelle.ids && partis.length) {
+      const ancien = new Map();
+      for (const u of partis) if (ref.ids[u]) ancien.set(ref.ids[u], u);
+      const retires = new Set();
+      for (const u of arrives) {
+        const id = actuelle.ids[u];
+        if (id && ancien.has(id)) { renommes.push([ancien.get(id), u]); retires.add(u); retires.add(ancien.get(id)); }
+      }
+      arrives = arrives.filter((u) => !retires.has(u));
+      partis = partis.filter((u) => !retires.has(u));
+    }
+    return { arrives, partis, renommes };
+  }
+
   function renduComparaison() {
     const res = $("#ift-c-resultat");
     const t = $("#ift-c-type").value;
     const actuelle = resultats[t];
-    if (!reference) { res.innerHTML = ""; return; }
+    const ref = refPour(t);
+    if (!ref) {
+      res.innerHTML = reference
+        ? `<div class="ift-vide"><p>La référence chargée concerne <b>${motType(reference.type)}</b>, pas ${motType(t)}.</p></div>`
+        : "";
+      return;
+    }
     if (!actuelle) {
       res.innerHTML = `<div class="ift-vide">${icone.balance}<p>Lance d'abord une capture
         (onglet ${motType(t)}), puis compare-la ici à ta référence.</p></div>`;
       return;
     }
-    const refs = reference.noms;
-    if (reference.type !== t) {
-      res.innerHTML = `<div class="ift-vide"><p>La référence chargée concerne
-        <b>${motType(reference.type)}</b>, pas ${motType(t)}.</p></div>`;
-      return;
-    }
-    const arrives = actuelle.noms.filter((u) => !refs.has(u));
-    const partis = [...refs].filter((u) => !actuelle.noms.includes(u));
+    const refs = ref.noms;
+    const { arrives, partis, renommes } = calculerDiff(ref, actuelle);
     const lignesDe = (liste, genre) => `<div class="ift-groupe ${genre}">
         <h4>${genre === "vert" ? "+" : "−"} ${liste.length} compte${liste.length > 1 ? "s" : ""}</h4>
         <div class="ift-lignes">` + liste.map((u) => {
@@ -601,30 +637,40 @@
           return `<div class="ift-ligne">${av ? `<img class="ift-avatar" src="${echappe(av)}" alt="" onerror="this.style.visibility='hidden'">` : `<span class="ift-rang">${echappe(u[0])}</span>`}
             <a href="https://instagram.com/${echappe(u)}/" target="_blank" rel="noopener noreferrer">@${echappe(u)}</a></div>`;
         }).join("") + `</div></div>`;
+    const avertissements = [
+      actuelle.partiel ? "La capture actuelle est incomplète : les « partis » ne sont pas calculés (ils seraient juste non lus)." : "",
+      ref.partiel ? "La référence est une capture partielle : les « arrivés » sont peut-être surévalués." : "",
+    ].filter(Boolean).map((m) => `<div class="ift-statut" style="margin-bottom:10px;color:var(--rose)">⚠️ ${m}</div>`).join("");
     res.innerHTML = `
+      ${avertissements}
       <div class="ift-bilan">
         <span class="ift-puce ok"><span class="point"></span>Arrivés depuis la référence <b>+${arrives.length}</b></span>
         <span class="ift-puce rose"><span class="point"></span>Partis depuis la référence <b>−${partis.length}</b></span>
-        <span class="ift-puce"><span class="point"></span>Net <b>${arrives.length - partis.length >= 0 ? "+" : ""}${arrives.length - partis.length}</b></span>
+        ${renommes.length ? `<span class="ift-puce"><span class="point"></span>Renommés <b>${renommes.length}</b></span>` : ""}
         <span class="ift-puce"><span class="point"></span>Avant <b>${refs.size}</b> → Après <b>${actuelle.noms.length}</b></span>
+        <span class="ift-puce"><span class="point"></span>Référence : ${echappe(ref.source)}</span>
       </div>
       ${arrives.length ? lignesDe(arrives, "vert") : ""}
       ${partis.length ? lignesDe(partis, "rose") : ""}
-      ${!arrives.length && !partis.length ? `<div class="ift-vide"><p>Aucun changement depuis la référence.</p></div>` : ""}
+      ${renommes.length ? `<div class="ift-groupe"><h4>↻ ${renommes.length} renommé${renommes.length > 1 ? "s" : ""}</h4>
+        <div class="ift-lignes">${renommes.map(([a, b]) => `<div class="ift-ligne"><span class="ift-rang">${echappe(b[0])}</span>
+        <a href="https://instagram.com/${echappe(b)}/" target="_blank" rel="noopener noreferrer">@${echappe(a)} → @${echappe(b)}</a></div>`).join("")}</div></div>` : ""}
+      ${!arrives.length && !partis.length && !renommes.length ? `<div class="ift-vide"><p>Aucun changement depuis la référence.</p></div>` : ""}
       <div class="rangee" style="margin-top:14px">
         <button class="ift-bouton" id="ift-c-rapport">${icone.fichier} Télécharger le rapport</button>
       </div>`;
     $("#ift-c-rapport").onclick = () => {
       const l = [
         `Comparaison des ${motType(t)} de @${cible}`,
-        `Référence : ${reference.source} — ${refs.size}`,
-        `Capture du ${stamp().replace("_", " à ").replace(/(\d{2})(\d{2})(\d{2})$/, "$1:$2:$3")} — ${actuelle.noms.length}`,
-        `Arrivés : +${arrives.length}   Partis : -${partis.length}`,
+        `Référence : ${ref.source} — ${refs.size}`,
+        `Capture du ${stamp().replace("_", " à ").replace(/(\d{2})(\d{2})(\d{2})$/, "$1:$2:$3")} — ${actuelle.noms.length}${actuelle.partiel ? " (PARTIELLE)" : ""}`,
+        `Arrivés : +${arrives.length}   Partis : -${partis.length}${renommes.length ? `   Renommés : ${renommes.length}` : ""}`,
         "",
       ];
       if (arrives.length) l.push("+ Arrivés :", ...arrives.map((u) => "  +" + u), "");
       if (partis.length) l.push("- Partis :", ...partis.map((u) => "  -" + u), "");
-      if (!arrives.length && !partis.length) l.push("Aucun changement.");
+      if (renommes.length) l.push("~ Renommés :", ...renommes.map(([a, b]) => `  ${a} -> ${b}`), "");
+      if (!arrives.length && !partis.length && !renommes.length) l.push("Aucun changement.");
       telechargerFichier(l.join("\n"), `comparaison_${cible}_${t}_${stamp()}.txt`);
     };
   }
@@ -649,6 +695,10 @@
   }
 
   function brancherComparaison() {
+    const auto = Object.keys(refsAuto).find((t) => resultats[t]) || Object.keys(refsAuto)[0];
+    if (!reference && auto) $("#ift-c-type").value = auto;
+    $("#ift-c-type").onchange = renduComparaison;
+    if (refPour($("#ift-c-type").value)) renduComparaison();
     $("#ift-c-fichier").onclick = () => $("#ift-c-input").click();
     $("#ift-c-input").onchange = async (e) => {
       const f = e.target.files[0];
@@ -659,9 +709,9 @@
     $("#ift-c-go").onclick = () => {
       const texte = $("#ift-c-texte").value;
       if (texte.trim()) chargerReference(texte, "texte collé");
-      const refs = reference?.noms;
+      const refs = refPour($("#ift-c-type").value)?.noms;
       if (!refs) { $("#ift-c-message").textContent = "Charge d'abord une référence (fichier ou texte)."; return; }
-      $("#ift-c-message").textContent = `Référence : ${refs.size} comptes (${motType(reference.type)}).`;
+      $("#ift-c-message").textContent = `Référence : ${refs.size} comptes (${motType($("#ift-c-type").value)}).`;
       renduComparaison();
     };
   }
@@ -675,7 +725,9 @@
     if (!noms2.size) { toast("Aucun @ trouvé dans cette référence.", "erreur"); return; }
     const m = source.match(/abonnements|following/i);
     const type2 = m ? "abonnements" : "abonnes";
-    reference = { type: type2, noms: noms2, source };
+    const partielle = texte.includes("CAPTURE PARTIELLE");
+    reference = { type: type2, noms: noms2, source, partiel: partielle };
+    if (partielle) toast("Cette référence est une capture partielle : la comparaison sera approximative.", "warning");
     $("#ift-c-type").value = type2;
     const nf = $("#ift-c-nomfichier");
     if (nf) nf.textContent = `${source} — ${noms2.size} comptes (${motType(type2)})`;
@@ -700,7 +752,206 @@
     while (flux.children.length > 24) flux.lastChild.remove();
   }
 
-  // ————— capture
+  // mise à jour commune du panneau de gauche (défilement et API)
+  function majUI(txt2, pct, attendu) {
+    $("#ift-statut").innerHTML = txt2;
+    $("#ift-prog").style.setProperty("--ift-prog", pct);
+    $("#ift-prog2").style.setProperty("--ift-prog", pct);
+    $("#ift-m-noms").textContent = noms.size;
+    $("#ift-m-lignes").textContent = lignesMax || "—";
+    $("#ift-m-annonce").textContent = attendu || "—";
+    $("#ift-hero").textContent = noms.size;
+    $("#ift-hero-note").textContent = `${motType()}${attendu ? ` · ${noms.size}/${attendu}` : " · en cours"}`;
+  }
+
+  // ————— capture par l'API d'Instagram (rapide, avec avatars et identifiants).
+  // Le défilement du panneau reste le plan B si l'API ne répond pas.
+  const API = {
+    appId: "936619743392459", asbd: "129477",
+    parPage: 50, maxPages: 300,
+    pagesAvantPauseLongue: 15,
+    attenteLimite: 30,            // secondes × numéro d'essai après un 429
+    essais: 3,
+    ageMaxReprise: 24 * 3600 * 1000,
+  };
+  const apiDispo = () => window.__IFT_FORCE_API__ === true || /(^|\.)instagram\.com$/.test(location.hostname);
+  const cookie = (n) => {
+    const m = document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : null;
+  };
+  const stockage = {
+    lire(cle) { try { return JSON.parse(localStorage.getItem(cle)); } catch { return null; } },
+    ecrire(cle, v) { try { localStorage.setItem(cle, JSON.stringify(v)); } catch {} },
+    effacer(cle) { try { localStorage.removeItem(cle); } catch {} },
+  };
+  const cleReprise = (t) => `ift_cp_${cible}_${t}`;     // capture interrompue, à reprendre
+  const cleCache = (t) => `ift_cache_${cible}_${t}`;    // dernière capture complète
+  let pausee = false;
+
+  async function attendrePause() { while (pausee && !stop) await sleep(300); }
+  async function compteARebours(secondes, raison) {
+    for (let s = secondes; s > 0 && !stop; s--) {
+      $("#ift-statut").textContent = `${raison} — reprise dans ${s} s…`;
+      await sleep(1000);
+    }
+  }
+
+  // GET JSON ; patiente et réessaie si Instagram limite le débit ou si le réseau flanche
+  async function apiGet(url) {
+    const entetes = { "X-IG-App-ID": API.appId, "X-ASBD-ID": API.asbd, "X-Requested-With": "XMLHttpRequest", Accept: "*/*" };
+    const csrf = cookie("csrftoken");
+    if (csrf) entetes["X-CSRFToken"] = csrf;
+    for (let essai = 0; ; essai++) {
+      if (stop) return { ok: false, statut: 0, limite: false };
+      let statut = 0, msg = "";
+      try {
+        const r = await fetch(url, { credentials: "same-origin", headers: entetes });
+        statut = r.status;
+        const data = await r.json().catch(() => null);
+        msg = String(data?.message ?? "");
+        if (r.ok && data && data.status !== "fail") return { ok: true, data };
+      } catch { statut = 0; }
+      const limite = statut === 429 || /feedback_required|checkpoint|rate limit|please wait/i.test(msg);
+      if ((limite || statut === 0 || statut >= 500) && essai < API.essais) {
+        await compteARebours(
+          limite ? API.attenteLimite * (essai + 1) : 5 * (essai + 1),
+          limite ? "Instagram demande de patienter" : "Réseau instable");
+        continue;
+      }
+      return { ok: false, statut, limite };
+    }
+  }
+
+  async function infosProfil() {
+    const r = await apiGet(`/api/v1/users/web_profile_info/?username=${encodeURIComponent(cible)}`);
+    const u = r.ok ? r.data?.data?.user : null;
+    if (!u?.id) return null;
+    return { id: String(u.id), abonnes: u.edge_followed_by?.count ?? null, abonnements: u.edge_follow?.count ?? null };
+  }
+
+  // la capture précédente (complète) devient la référence ; la nouvelle la remplace
+  function comparerAuCache(t, liste, ids) {
+    const prev = stockage.lire(cleCache(t));
+    if (prev && Array.isArray(prev.n) && prev.n.length) {
+      refsAuto[t] = {
+        type: t, noms: new Set(prev.n), ids: prev.i || {}, auto: true,
+        source: `capture du ${new Date(prev.a).toLocaleString("fr-FR")}`,
+      };
+    }
+    stockage.ecrire(cleCache(t), { a: new Date().toISOString(), n: liste, i: ids });
+  }
+
+  // renvoie "ok" · "partiel" · "indisponible" (rien lu : on bascule sur le défilement)
+  async function capturerAPI(t, info) {
+    type = t;
+    dernierType = t;
+    const suffixe = t === "abonnements" ? "following" : "followers";
+    const attendu = t === "abonnements" ? info.abonnements : info.abonnes;
+    noms.clear();
+    lignesMax = 0;
+    let ids = {}, curseur = null, page = 0, reprise = false;
+
+    const cp = stockage.lire(cleReprise(t));
+    if (cp && cp.c && Array.isArray(cp.u) && Date.now() - cp.t < API.ageMaxReprise) {
+      for (const [u, id] of cp.u) { noms.add(u); ids[u] = id; }
+      curseur = cp.c; page = cp.p || 0; reprise = true;
+      lignesMax = noms.size;
+      toast(`Reprise de la capture interrompue (${noms.size} ${motType(t)} déjà lus).`, "succes");
+    }
+    const sauveReprise = () => stockage.ecrire(cleReprise(t), {
+      t: Date.now(), c: curseur, p: page, u: [...noms].map((u) => [u, ids[u]]),
+    });
+
+    let complet = false, premiere = true;
+    while (!stop) {
+      await attendrePause();
+      if (stop) break;
+      const url = `/api/v1/friendships/${info.id}/${suffixe}/?count=${API.parPage}` +
+        (curseur ? `&max_id=${encodeURIComponent(curseur)}` : "");
+      const r = await apiGet(url);
+      if (!r.ok) {
+        if (premiere && reprise && !r.limite && !stop) {
+          // curseur périmé : on repart de zéro
+          stockage.effacer(cleReprise(t));
+          noms.clear(); ids = {}; curseur = null; page = 0; reprise = false; lignesMax = 0;
+          continue;
+        }
+        if (premiere && !noms.size && !r.limite && !stop) return "indisponible";
+        break;
+      }
+      premiere = false;
+      const users = Array.isArray(r.data.users) ? r.data.users : [];
+      const nouveaux = [];
+      for (const us of users) {
+        const u = String(us.username || "").toLowerCase();
+        if (!u) continue;
+        if (!noms.has(u)) { noms.add(u); nouveaux.push(u); }
+        ids[u] = String(us.pk_id ?? us.pk ?? us.id ?? "");
+        if (us.profile_pic_url) avatars.set(u, us.profile_pic_url);
+      }
+      lignesMax = noms.size;
+      if (nouveaux.length) fluxAjouter(nouveaux, t);
+      page++;
+      curseur = r.data.next_max_id ? String(r.data.next_max_id) : null;
+      majUI(`<b>${noms.size}</b> ${motType()}${attendu ? ` / ${attendu}` : ""} — page ${page}`,
+        attendu ? Math.min(99, Math.round((noms.size / attendu) * 100)) : Math.min(90, page), attendu);
+
+      if (!curseur || r.data.has_more === false || !users.length) { complet = true; break; }
+      if (page % 5 === 0) sauveReprise();
+      if (page >= API.maxPages) { toast(`Limite de sécurité atteinte (${API.maxPages} pages) : capture partielle.`, "warning"); break; }
+
+      if (page % API.pagesAvantPauseLongue === 0) {
+        await compteARebours(8 + Math.floor(Math.random() * 7), "Pause de sécurité");
+      } else {
+        await sleep(700 + Math.random() * 900);
+      }
+    }
+
+    const liste = [...noms].sort();
+    const idsTries = Object.fromEntries(liste.map((u) => [u, ids[u] || ""]));
+    const partiel = !complet;
+    resultats[t] = {
+      noms: liste, lignes: liste.length, annonce: attendu, sansNom: 0,
+      a: new Date().toISOString(), partiel, ids: idsTries, via: "api",
+    };
+    if (complet) {
+      stockage.effacer(cleReprise(t));
+      comparerAuCache(t, liste, idsTries);
+    } else if (curseur) {
+      sauveReprise();
+    }
+    const msg = complet
+      ? `${motType()} complète : <b>${liste.length}</b>${attendu ? ` / ${attendu}` : ""} ✓`
+      : `⚠️ Capture <b>partielle</b> : ${liste.length} ${motType()}${attendu ? ` / ${attendu}` : ""}. Relance pour reprendre là où elle s'est arrêtée.`;
+    majUI(msg, 100, attendu);
+    puces();
+    renduOnglets();
+    telechargerListe(t);
+    return complet ? "ok" : "partiel";
+  }
+
+  // enchaîne abonnés puis abonnements via l'API ; false = API inutilisable (→ défilement)
+  async function scannerAPI() {
+    if (!apiDispo()) return false;
+    if (cible === "profil") return false;
+    $("#ift-statut").textContent = `Lecture du profil @${cible}…`;
+    const info = await infosProfil();
+    if (!info) return false;
+    sessionStorage.setItem("ift_cible", cible);
+    $("#ift-pause").style.display = "";
+    let etat = await capturerAPI("abonnes", info);
+    if (etat === "indisponible") { $("#ift-pause").style.display = "none"; return false; }
+    if (!stop && etat !== "indisponible") {
+      await sleep(1200);
+      etat = await capturerAPI("abonnements", info);
+      if (etat === "indisponible") toast("Impossible de lire « abonnements » via l'API : relance, ou ouvre la liste et utilise le défilement.", "warning");
+    }
+    $("#ift-pause").style.display = "none";
+    pausee = false;
+    return true;
+  }
+
+  // ————— capture par défilement du panneau (plan B)
   async function capturer(dialog) {
     noms.clear();
     lignesMax = 0;
@@ -711,16 +962,7 @@
     const attendu = nombreAnnonce();
     extraireDepuis(dialog);
     const statut = $("#ift-statut");
-    const maj = (txt2, pct) => {
-      statut.innerHTML = txt2;
-      $("#ift-prog").style.setProperty("--ift-prog", pct);
-      $("#ift-prog2").style.setProperty("--ift-prog", pct);
-      $("#ift-m-noms").textContent = noms.size;
-      $("#ift-m-lignes").textContent = lignesMax || "—";
-      $("#ift-m-annonce").textContent = attendu || "—";
-      $("#ift-hero").textContent = noms.size;
-      $("#ift-hero-note").textContent = `${motType()}${attendu ? ` · ${noms.size}/${attendu}` : " · en cours"}`;
-    };
+    const maj = (txt2, pct) => majUI(txt2, pct, attendu);
 
     const pas = () => Math.max(300, Math.round((conteneur.clientHeight || 600) * 0.8));
     let sansNouveaute = 0, precedent = noms.size, tour = 0;
@@ -785,6 +1027,8 @@
     $("#ift-scan").disabled = true;
     $("#ift-scan").innerHTML = `${icone.scan} Capture en cours…`;
 
+    if (await scannerAPI()) { finScan(); return; }
+
     let dialog = [...document.querySelectorAll('div[role="dialog"]')].pop() || null;
     if (!dialog) {
       if (cible === "profil") {
@@ -822,13 +1066,29 @@
       else toast(`Impossible d'ouvrir « ${autre === "following" ? "abonnements" : "abonnés"} » tout seul : ouvre-la et relance (la capture faite est gardée).`, "warning");
     }
 
+    finScan();
+  }
+
+  function finScan() {
     window.ift.fin = true;
     $("#ift-scan").disabled = false;
     $("#ift-scan").innerHTML = `${icone.scan} Relancer la capture`;
-    ongletActif = Object.keys(resultats)[0] || "abonnes";
+    const partiel = Object.values(resultats).some((r) => r.partiel);
+    const avecRef = Object.keys(refsAuto).filter((t) => resultats[t] && !resultats[t].partiel);
+    ongletActif = avecRef.length ? "comparaison" : Object.keys(resultats)[0] || "abonnes";
     renduOnglets();
     renduVue();
-    toast("Capture terminée — compare dans l'onglet « Comparaison ».", "succes");
+    if (avecRef.length) {
+      const bilan = avecRef.map((t) => {
+        const d = calculerDiff(refsAuto[t], resultats[t]);
+        return `${motType(t)} +${d.arrives.length} / −${d.partis.length}`;
+      }).join(" · ");
+      toast(`Comparé à la capture précédente — ${bilan}`, "succes");
+    } else if (partiel) {
+      toast("Capture incomplète : relance pour la reprendre.", "warning");
+    } else {
+      toast("Capture terminée — elle sert de référence pour la prochaine.", "succes");
+    }
   }
 
   // ————— API console
@@ -838,9 +1098,11 @@
     get count() { return noms.size; },
     get lignes() { return lignesMax; },
     listes: resultats,
-    stop() { stop = true; console.log("🛑 IFT : arrêt demandé — données conservées."); },
+    pause() { pausee = !pausee; $("#ift-pause").textContent = pausee ? "Reprendre" : "Pause"; return pausee; },
+    stop() { stop = true; pausee = false; console.log("🛑 IFT : arrêt demandé — données conservées."); },
     clear() {
       stop = true; noms.clear(); avatars.clear(); lignesMax = 0;
+      for (const k of Object.keys(refsAuto)) delete refsAuto[k];
       for (const k of Object.keys(resultats)) delete resultats[k];
       reference = null;
       this.fin = false;
@@ -877,6 +1139,7 @@
   // ————— branchements
   $("#ift-scan").onclick = scanner;
   $("#ift-fermer").onclick = () => window.ift.fermer();
+  $("#ift-pause").onclick = () => window.ift.pause();
   const onEscape = (e) => { if (e.key === "Escape") window.ift.stop(); };
   document.addEventListener("keydown", onEscape);
   new MutationObserver(function surveille() {
