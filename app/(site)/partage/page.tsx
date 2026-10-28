@@ -11,7 +11,7 @@ export default function Page() {
         <div className="page-head">
           <div>
             <h1>Partage ton tri.</h1>
-            <p>Des stories prêtes à poster. Sur celle avec l&rsquo;emplacement, pose un sticker mention @ pour taguer qui tu veux.</p>
+            <p>Des stories prêtes à poster. Sur la noire, pose un sticker sondage dans l&rsquo;espace libre.</p>
           </div>
         </div>
         <ul className="stories">
